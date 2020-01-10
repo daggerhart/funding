@@ -1,0 +1,9 @@
+name: Funding
+description: Post Crowdfunding links and widgets for OpenCollective and similar platforms. 
+package: Fields
+
+type: module
+core: 8.x
+
+dependencies:
+  - drupal:link
