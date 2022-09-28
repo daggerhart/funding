@@ -2,7 +2,7 @@
 
 namespace Drupal\funding\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Serialization\Yaml;
+use Symfony\Component\Yaml\Yaml;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -32,16 +32,16 @@ class FundingWidget extends WidgetBase {
       '#element_validate' => [
         [$this, 'validate'],
       ],
-      '#description' => <<<YAML
+      '#description' => $this->t(<<<YAML
         open_collective-js:
             slug: portland-drupal
             verb: donate
-           color: blue
+            color: blue
         open_collective-img:
-           slug: portland-drupal
-           verb: contribute
-           color: white.
-        YAML,
+            slug: portland-drupal
+            verb: contribute
+            color: white
+        YAML),
     ];
     return ['value' => $element];
   }
@@ -57,7 +57,7 @@ class FundingWidget extends WidgetBase {
       return;
     }
     try {
-      $items = Yaml::parse($item['value'], Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+      $items = Yaml::parse($value, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
       if (is_array($items)) {
         foreach ($items as $provider => $username) {
           if (is_array($username) && !isset($username['slug'])) {
