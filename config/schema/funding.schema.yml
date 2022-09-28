@@ -1,4 +1,4 @@
-field.value.funding_value:
+field.value.funding:
   type: mapping
   label: 'Default value'
   mapping:
