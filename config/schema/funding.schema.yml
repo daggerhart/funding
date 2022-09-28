@@ -1,0 +1,7 @@
+field.value.funding_value:
+  type: mapping
+  label: 'Default value'
+  mapping:
+    value:
+      type: text
+      label: 'Value'

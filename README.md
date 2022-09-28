@@ -1,8 +1,6 @@
 # Funding
 
-*******
-
-The goal of this project is to enable people to post their crowdfunding information (Patreon, OpenCollective, etc) without needing to allow script tags. Our first customer will be Drupal.org (we hope).
+The goal of the [Funding](https://drupal.org/project/funding) Extensions for CMS Users project is to enable people to post their crowdfunding information (Patreon, OpenCollective, etc) without needing to allow script tags. Our first customer will be Drupal.org (we hope).
 
 ## How to Install
 
