@@ -32,6 +32,16 @@ class FundingWidget extends WidgetBase {
       '#element_validate' => [
         [$this, 'validate'],
       ],
+      '#description' => <<<YAML
+        open_collective-js:
+            slug: portland-drupal
+            verb: donate
+           color: blue
+        open_collective-img:
+           slug: portland-drupal
+           verb: contribute
+           color: white.
+        YAML,
     ];
     return ['value' => $element];
   }
@@ -47,7 +57,7 @@ class FundingWidget extends WidgetBase {
       return;
     }
     try {
-      $items = Yaml::parse($item['value']);
+      $items = Yaml::parse($item['value'], Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
       if (is_array($items)) {
         foreach ($items as $provider => $username) {
           if (is_array($username) && !isset($username['slug'])) {
