@@ -12,7 +12,6 @@ use Drupal\Core\TypedData\DataDefinition;
  * @FieldType(
  *   id = "funding",
  *   label = @Translation("Funding YAML"),
- *   module = "funding",
  *   description = @Translation("Accepts YAML describing crowdfunding accounts."),
  *   default_widget = "funding",
  *   default_formatter = "funding_text"

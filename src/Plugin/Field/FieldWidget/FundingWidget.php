@@ -2,7 +2,7 @@
 
 namespace Drupal\funding\Plugin\Field\FieldWidget;
 
-use Symfony\Component\Yaml\Yaml;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,10 +12,9 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * @FieldWidget(
  *   id = "funding",
- *   module = "funding",
  *   label = @Translation("Funding YAML"),
  *   field_types = {
- *     "funding/"
+ *     "funding"
  *   }
  * )
  */
@@ -30,9 +29,12 @@ class FundingWidget extends WidgetBase {
       '#type' => 'textarea',
       '#default_value' => $value,
       '#element_validate' => [
-        [$this, 'validate'],
+        [
+          static::class,
+          'validateFunding',
+        ],
       ],
-      '#description' => $this->t(<<<YAML
+      '#description' => t(<<<YAML
         open_collective-js:
             slug: portland-drupal
             verb: donate
@@ -47,9 +49,9 @@ class FundingWidget extends WidgetBase {
   }
 
   /**
-   * Validate the color text field.
+   * Validate the funding yaml field.
    */
-  public function validate($element, FormStateInterface $form_state) {
+  public static function validateFunding(&$element, FormStateInterface $form_state, $form) {
     $message = '';
     $value = $element['#value'];
     if (strlen($value) === 0) {
@@ -57,27 +59,27 @@ class FundingWidget extends WidgetBase {
       return;
     }
     try {
-      $items = Yaml::parse($value, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
+      $items = Yaml::decode($value);
       if (is_array($items)) {
         foreach ($items as $provider => $username) {
           if (is_array($username) && !isset($username['slug'])) {
-            $message = $this->t('No "slug:" provided for array: %provider',
+            $message = t('No "slug:" provided for array: %provider',
               ['%provider', $provider]
             );
           }
           elseif (empty($username)) {
-            $message = $this->t('No username provided for provider: %provider',
+            $message = t('No username provided for provider: %provider',
               ['%provider', $provider]
             );
           }
         }
       }
       else {
-        $message = $this->t('Unable to parse the YAML array. Please check the format and try again.');
+        $message = t('Unable to parse the YAML array. Please check the format and try again.');
       }
     }
     catch (ParseException $e) {
-      $message = $this->t('Unable to parse the YAML string: %message',
+      $message = t('Unable to parse the YAML string: %message',
         ['%message', $e->getMessage()]
       );
     }
