@@ -8,17 +8,17 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 
 /**
- * Plugin implementation of the 'funding_button' formatter.
+ * Plugin implementation of the 'funding_yaml' formatter.
  *
  * @FieldFormatter(
- *   id = "funding_button",
- *   label = @Translation("Funding buttons"),
+ *   id = "funding_yaml",
+ *   label = @Translation("Funding YAML (debug)"),
  *   field_types = {
  *     "funding"
  *   }
  * )
  */
-class FundingButtonFormatter extends FormatterBase {
+class FundingYamlFormatter extends FormatterBase {
 
   /**
    * {@inheritdoc}
@@ -27,8 +27,6 @@ class FundingButtonFormatter extends FormatterBase {
     $elements = [];
 
     foreach ($items as $delta => $item) {
-      // @todo copy logic from Drupal 7 module, to allow other modules to display based on provider names
-      // @todo we should not need Html::escape here in the future
       $elements[$delta] = [
         '#type' => 'html_tag',
         '#tag' => 'pre',

@@ -34,7 +34,7 @@ class FundingWidget extends WidgetBase {
           'validateFunding',
         ],
       ],
-      '#description' => t(<<<YAML
+      '#description' => $this->t(<<<YAML
         open_collective-js:
             slug: portland-drupal
             verb: donate
@@ -60,6 +60,7 @@ class FundingWidget extends WidgetBase {
     }
     try {
       $items = Yaml::decode($value);
+      // @todo allow other modules to validate based on provider names, maybe with annotations per provider name
       if (is_array($items)) {
         foreach ($items as $provider => $username) {
           if (is_array($username) && !isset($username['slug'])) {

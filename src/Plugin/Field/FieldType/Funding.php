@@ -9,6 +9,8 @@ use Drupal\Core\TypedData\DataDefinition;
 /**
  * Plugin implementation of the 'funding' field type.
  *
+ * @todo determine if other field types would be needed, or just other widgets/formatters
+ *
  * @FieldType(
  *   id = "funding",
  *   label = @Translation("Funding YAML"),
