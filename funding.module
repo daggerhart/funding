@@ -1,0 +1,17 @@
+<?php
+/**
+ * Implements hook_theme().
+ */
+function funding_theme($existing, 
+$type, 
+$theme, 
+$path) {
+  return [
+    'funding_text_open_collective' => [
+      'variables' => [
+        'slug' => NULL,
+        'verb' => NULL,
+      ],
+    ],
+  ];
+}
