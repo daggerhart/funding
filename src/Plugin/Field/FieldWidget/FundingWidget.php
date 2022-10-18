@@ -6,6 +6,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 
 /**
  * Plugin implementation of the 'funding' widget.
@@ -78,6 +79,9 @@ class FundingWidget extends WidgetBase {
       else {
         $message = t('Unable to parse the YAML array. Please check the format and try again.');
       }
+    }
+    catch (InvalidDataTypeException $e) {
+      $message = $e->getMessage();
     }
     catch (ParseException $e) {
       $message = t('Unable to parse the YAML string: %message',

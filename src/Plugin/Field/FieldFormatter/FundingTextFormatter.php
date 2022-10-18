@@ -2,7 +2,6 @@
 
 namespace Drupal\funding\Plugin\Field\FieldFormatter;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -28,12 +27,16 @@ class FundingTextFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       // @todo copy logic from Drupal 7 module, to allow other modules to display based on provider names
-      // @todo we should not need Html::escape here in the future
-      $elements[$delta] = [
-        '#type' => 'html_tag',
-        '#tag' => 'pre',
-        '#value' => Html::escape(Yaml::encode(Yaml::decode($item->value))),
-      ];
+      $yaml_items = Yaml::decode($item->value);
+      foreach ($yaml_items as $yaml_item_key => $yaml_item) {
+        if ($yaml_item_key == 'open_collective-button') {
+          $elements[$delta] = [
+            '#theme' => 'funding_text_open_collective',
+            '#slug' => $yaml_item['slug'],
+            '#verb' => $yaml_item['verb'],
+          ];
+        }
+      }
     }
 
     return $elements;
