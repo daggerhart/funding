@@ -17,6 +17,21 @@ $path) {
       'variables' => [
         'slug' => NULL,
         'verb' => NULL,
+        'color' => NULL,
+      ],
+    ],
+    'funding_text_open_collective_button' => [
+      'variables' => [
+        'slug' => NULL,
+        'verb' => NULL,
+        'color' => NULL,
+      ],
+    ],
+    'funding_text_open_collective_js_button' => [
+      'variables' => [
+        'slug' => NULL,
+        'verb' => NULL,
+        'color' => NULL,
       ],
     ],
   ];
