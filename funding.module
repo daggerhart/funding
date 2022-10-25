@@ -20,14 +20,14 @@ $path) {
         'color' => NULL,
       ],
     ],
-    'funding_text_open_collective_button' => [
+    'funding_button_open_collective' => [
       'variables' => [
         'slug' => NULL,
         'verb' => NULL,
         'color' => NULL,
       ],
     ],
-    'funding_text_open_collective_js_button' => [
+    'funding_js_open_collective' => [
       'variables' => [
         'slug' => NULL,
         'verb' => NULL,

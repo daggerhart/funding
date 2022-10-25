@@ -29,11 +29,19 @@ class FundingTextFormatter extends FormatterBase {
       // @todo copy logic from Drupal 7 module, to allow other modules to display based on provider names
       $yaml_items = Yaml::decode($item->value);
       foreach ($yaml_items as $yaml_item_key => $yaml_item) {
-        if ($yaml_item_key == 'open_collective-button') {
+        if ($yaml_item_key == 'open_collective-embed') {
           $elements[$delta] = [
             '#theme' => 'funding_text_open_collective',
             '#slug' => $yaml_item['slug'],
             '#verb' => $yaml_item['verb'],
+          ];
+        }
+        if ($yaml_item_key == 'open_collective' && is_string($yaml_item)) {
+          $elements[$delta] = [
+            '#theme' => 'funding_text_open_collective',
+            '#slug' => $yaml_item,
+            // @todo make this default configurable in widget form?
+            '#verb' => 'donate',
           ];
         }
       }
