@@ -27,7 +27,7 @@ $path) {
         'color' => NULL,
       ],
     ],
-    'funding_js_open_collective' => [
+    'funding_image_open_collective' => [
       'variables' => [
         'slug' => NULL,
         'verb' => NULL,

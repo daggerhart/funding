@@ -30,7 +30,7 @@ class FundingEmbedFormatter extends FormatterBase {
       foreach ($yaml_items as $yaml_item_key => $yaml_item) {
         if ($yaml_item_key == 'open_collective-embed') {
           $elements[$delta] = [
-            '#theme' => $this->getOpenCollectiveThemeByType($yaml_item['type']),
+            '#theme' => $this->getOpenCollectiveThemeByType($yaml_item['type'] ? $yaml_item['type'] : 'button'),
             '#slug' => $yaml_item['slug'],
             '#verb' => $yaml_item['verb'],
             '#color' => $yaml_item['color'],
@@ -59,8 +59,8 @@ class FundingEmbedFormatter extends FormatterBase {
   private function getOpenCollectiveThemeByType($type) {
     $types = [
       // @todo add all the Open Collective widget types.
+      'button' => 'funding_button_open_collective',
       'image' => 'funding_image_open_collective',
-      'js' => 'funding_js_open_collective',
     ];
     return $types[$type];
   }

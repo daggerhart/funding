@@ -27,19 +27,44 @@ custom: https://example.com
 
 Any providers that are not supported will not be displayed, though they will be stored in the database.
 
-### Funding buttons
+### Open Collective Embed Scipts
 
-If you are using the "Funding buttons" variant, you will want to use YAML that looks like this:
+If you are using the "embed" variant, you will want to use YAML that looks like this:
 
 ```yaml
-open_collective-js:
-  slug: portland-drupal
-  verb: donate
-  color: blue
-open_collective-img:
-  slug: portland-drupal
-  verb: contribute
-  color: white
+open_collective: webform
+    // defaults to type: button, verb: donate, color: blue
+open_collective-embed:
+    type: button
+    slug: portland-drupal
+    verb: donate
+    color: blue
+open_collective-embed:
+    type: image
+    slug: portland-drupal
+    verb: contribute
+    color: white
+open_collective-embed:
+    type: banner
+    slug: drupal_gin
+open_collective-embed:
+    type: events
+    slug: portland-drupal
+open_collective-embed:
+    type: collectives
+    username: jrockowitz
+    role: backer
+// role defaults to backer
+// role accepts: backer, admin, member, host
+open_collective-embed:
+    type: contribute
+    slug: realtimeseo
+    parameters: 'amount=66.66&interval=month&platformTip=3.34&skipStepDetails=true'
+    // tier defaults to "donate"
+open_collective-embed:
+    type: contribute
+    slug: mautic-conference-europe-4da0de72
+    tier: general-access-ticket-32898
 ```
 
 ### Additional Help or Support
