@@ -1,6 +1,6 @@
 # Funding
 
-The goal of the [Funding](https://drupal.org/project/funding) Extensions for CMS Users project is to enable people to post their crowdfunding information ([OpenCollective](https://opencollective.com/), [Patreon](https://www.patreon.com/), etc.) without needing to allow script tags. Our first customer will be Drupal.org (we hope).
+The goal of the [Funding](https://drupal.org/project/funding) Tools project is to enable people to post their crowdfunding information ([OpenCollective](https://opencollective.com/), [Patreon](https://www.patreon.com/), etc.) without needing to allow script tags. Our first customer will be Drupal.org (we hope).
 
 ## How to Install
 
@@ -19,7 +19,7 @@ Once you get the module [installed](https://www.drupal.org/docs/extending-drupal
 ### Example Text
 
 ```yaml
-open_collective: portland-drupal
+open_collective: funding-tools
 patreon: liberatr
 github: liberatr
 custom: https://example.com
@@ -41,7 +41,7 @@ open_collective-embed:
     color: blue
 open_collective-embed:
     type: image
-    slug: portland-drupal
+    slug: funding-tools
     verb: contribute
     color: white
 open_collective-embed:

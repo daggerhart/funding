@@ -38,12 +38,12 @@ class FundingWidget extends WidgetBase {
       '#description' => $this->t(<<<YAML
         open_collective-embed:
             type: button
-            slug: portland-drupal
+            slug: funding-tools
             verb: donate
             color: blue
         open_collective-embed:
             type: image
-            slug: portland-drupal
+            slug: funding-tools
             verb: contribute
             color: white
         YAML),
