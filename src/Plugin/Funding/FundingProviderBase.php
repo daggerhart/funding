@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\funding;
+namespace Drupal\funding\Plugin\Funding;
 
 use Drupal\Component\Plugin\PluginBase;
 

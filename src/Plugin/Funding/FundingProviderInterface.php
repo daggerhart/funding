@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\funding;
+namespace Drupal\funding\Plugin\Funding;
 
 /**
  * Interface for funding_provider plugins.

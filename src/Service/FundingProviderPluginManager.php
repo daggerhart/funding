@@ -5,7 +5,7 @@ namespace Drupal\funding\Service;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
-use Drupal\funding\FundingProviderInterface;
+use Drupal\funding\Plugin\Funding\FundingProviderInterface;
 
 /**
  * FundingProvider plugin manager.
@@ -28,7 +28,7 @@ class FundingProviderPluginManager extends DefaultPluginManager {
       'Plugin/Funding/Provider',
       $namespaces,
       $module_handler,
-      'Drupal\funding\FundingProviderInterface',
+      'Drupal\funding\Plugin\Funding\FundingProviderInterface',
       'Drupal\funding\Annotation\FundingProvider'
     );
     $this->alterInfo('funding_provider_info');
@@ -43,7 +43,7 @@ class FundingProviderPluginManager extends DefaultPluginManager {
    * @param array $configuration
    *   Configuration data for the setup plugin.
    *
-   * @return object|\Drupal\funding\FundingProviderInterface
+   * @return object|\Drupal\funding\Plugin\Funding\FundingProviderInterface
    *   Instance of the plugin.
    *
    * @throws \Drupal\Component\Plugin\Exception\PluginException

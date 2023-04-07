@@ -2,7 +2,7 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
-use Drupal\funding\FundingProviderBase;
+use Drupal\funding\Plugin\Funding\FundingProviderBase;
 
 /**
  * Plugin implementation of the funding_provider.
