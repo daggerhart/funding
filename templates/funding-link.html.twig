@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a funding link.
+ *
+ * Available variables:
+ * - provider: Plugin ID for the FundingProvider plugin.
+ * - attributes: Can be modified in preprocess.
+ * - content: Content that appears within the link.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'funding-link',
+    'funding-link--' ~ provider,
+  ]
+%}
+<a {{ attributes.addClass(classes) }}>{{ content }}</a>

@@ -2,7 +2,6 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
-use Drupal\Core\Url;
 use Drupal\funding\FundingProviderPluginBase;
 
 /**
@@ -22,10 +21,11 @@ class LfxMentorship extends FundingProviderPluginBase {
   public function build($data): array {
     if (is_string($data)) {
       return [
-        '#type' => 'link',
-        '#title' => $data,
+        '#theme' => 'funding_link',
+        '#provider' => $this->id(),
+        '#content' => $data,
         // @todo - no idea what the url should be.
-        '#url' => Url::fromUri('https://lfx.linuxfoundation.org/' . $data),
+        '#url' => 'https://lfx.linuxfoundation.org/' . $data,
       ];
     }
 

@@ -2,7 +2,6 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
-use Drupal\Core\Url;
 use Drupal\funding\FundingProviderPluginBase;
 
 /**
@@ -27,9 +26,10 @@ class CustomUrl extends FundingProviderPluginBase {
     $build = [];
     foreach ($data as $item) {
       $build[] = [
-        '#type' => 'link',
-        '#title' => $item,
-        '#url' => Url::fromUri($item),
+        '#theme' => 'funding_link',
+        '#provider' => $this->id(),
+        '#content' => $item,
+        '#url' => $item,
       ];
     }
 

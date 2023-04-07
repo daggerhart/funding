@@ -2,7 +2,6 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
-use Drupal\Core\Url;
 use Drupal\funding\FundingProviderPluginBase;
 
 /**
@@ -22,9 +21,10 @@ class KoFi extends FundingProviderPluginBase {
   public function build($data): array {
     if (is_string($data)) {
       return [
-        '#type' => 'link',
-        '#title' => $data,
-        '#url' => Url::fromUri('https://ko-fi.com/' . $data),
+        '#theme' => 'funding_link',
+        '#provider' => $this->id(),
+        '#content' => $data,
+        '#url' => 'https://ko-fi.com/' . $data,
       ];
     }
 

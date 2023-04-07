@@ -2,7 +2,6 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
-use Drupal\Core\Url;
 use Drupal\funding\FundingProviderPluginBase;
 
 /**
@@ -22,10 +21,11 @@ class Tidelift extends FundingProviderPluginBase {
   public function build($data): array {
     if (is_string($data)) {
       return [
-        '#type' => 'link',
-        '#title' => $data,
+        '#theme' => 'funding_link',
+        '#provider' => $this->id(),
+        '#content' => $data,
         // @todo - no idea if this is the right url.
-        '#url' => Url::fromUri('https://www.tidelift.com/' . $data),
+        '#url' => 'https://www.tidelift.com/' . $data,
       ];
     }
 
