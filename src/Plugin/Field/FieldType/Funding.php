@@ -16,7 +16,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   label = @Translation("Funding YAML"),
  *   description = @Translation("Accepts YAML describing crowdfunding accounts."),
  *   default_widget = "funding",
- *   default_formatter = "funding_text"
+ *   default_formatter = "funding_funding_processor"
  * )
  */
 class Funding extends FieldItemBase {

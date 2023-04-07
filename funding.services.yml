@@ -1,0 +1,10 @@
+services:
+  plugin.manager.funding_provider:
+    class: Drupal\funding\Service\FundingProviderPluginManager
+    parent: default_plugin_manager
+
+  funding.provider_processor:
+    class: Drupal\funding\Service\FundingProviderProcessor
+    arguments:
+      - '@config.factory'
+      - '@plugin.manager.funding_provider'
