@@ -63,24 +63,24 @@ class FundingWidget extends WidgetBase {
     }
     try {
       $items = Yaml::decode($value);
-      // @todo allow other modules to validate based on provider names, maybe with annotations per provider name
-      if (is_array($items)) {
-        foreach ($items as $provider => $username) {
-          if (is_array($username) && !isset($username['slug'])) {
-            $message = t('No "slug:" provided for array: %provider',
-              ['%provider', $provider]
-            );
-          }
-          elseif (empty($username)) {
-            $message = t('No username provided for provider: %provider',
-              ['%provider', $provider]
-            );
-          }
-        }
-      }
-      else {
-        $message = t('Unable to parse the YAML array. Please check the format and try again.');
-      }
+//      // @todo allow other modules to validate based on provider names, maybe with annotations per provider name
+//      if (is_array($items)) {
+//        foreach ($items as $provider => $username) {
+//          if (is_array($username) && !isset($username['slug'])) {
+//            $message = t('No "slug:" provided for array: %provider',
+//              ['%provider', $provider]
+//            );
+//          }
+//          elseif (empty($username)) {
+//            $message = t('No username provided for provider: %provider',
+//              ['%provider', $provider]
+//            );
+//          }
+//        }
+//      }
+//      else {
+//        $message = t('Unable to parse the YAML array. Please check the format and try again.');
+//      }
     }
     catch (InvalidDataTypeException $e) {
       $message = $e->getMessage();
