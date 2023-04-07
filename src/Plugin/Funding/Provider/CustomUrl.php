@@ -21,7 +21,7 @@ class CustomUrl extends FundingProviderBase {
    * {@inheritdoc}
    */
   public function validate($data): bool {
-    if (is_string($data)) {
+    if (!is_array($data)) {
       $data = [$data];
     }
 
@@ -31,8 +31,7 @@ class CustomUrl extends FundingProviderBase {
       }
       catch (\Exception $exception) {
         throw new InvalidFundingProviderData(
-          strtr('Provider @provider: Custom Url #@i provided does not appear validate.', [
-            '@provider' => $this->id(),
+          strtr('Custom Url #@i provided is invalid.', [
             '@i' => ($i + 1),
           ]),
           0,
@@ -48,7 +47,7 @@ class CustomUrl extends FundingProviderBase {
    * {@inheritdoc}
    */
   public function build($data): array {
-    if (is_string($data)) {
+    if (!is_array($data)) {
       $data = [$data];
     }
 

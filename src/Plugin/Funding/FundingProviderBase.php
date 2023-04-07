@@ -41,8 +41,7 @@ abstract class FundingProviderBase extends PluginBase implements FundingProvider
   public function validate($data): bool {
     if (!is_string($data)) {
       throw new InvalidFundingProviderData(
-        strtr('Provider @provider: Expected a string, got @type instead.', [
-          '@provider' => $this->id(),
+        strtr('Expected a string, got @type instead.', [
           '@type' => gettype($data),
         ])
       );

@@ -93,8 +93,10 @@ class FundingWidget extends WidgetBase {
       return;
     }
 
+    $valid = FALSE;
     try {
       $rows = Yaml::decode($value);
+      $valid = $this->providerProcessor->rowsAreValid($rows);
     }
     catch (\Exception $exception) {
       $form_state->setError($element, $this->t('Unable to parse the YAML string: %message', [
@@ -103,11 +105,18 @@ class FundingWidget extends WidgetBase {
     }
 
     $results = $this->providerProcessor->validateRows($rows);
-    foreach ($results as $result) {
+    foreach ($results as $key => $result) {
       if ($result !== TRUE) {
         /** @var \Exception $result */
-        $form_state->setError($element, $result->getMessage());
+        $this->messenger()->addError($this->t('Provider @provider: @message', [
+          '@provider' => $key,
+          '@message' => $result->getMessage()
+        ]));
       }
+    }
+
+    if (!$valid) {
+      $form_state->setError($element, 'Invalid data found.');
     }
   }
 

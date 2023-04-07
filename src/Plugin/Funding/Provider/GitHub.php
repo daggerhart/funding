@@ -20,15 +20,14 @@ class GitHub extends FundingProviderBase {
    * {@inheritdoc}
    */
   public function validate($data): bool {
-    if (is_string($data)) {
+    if (!is_array($data)) {
       $data = [$data];
     }
 
     foreach ($data as $i => $item) {
       if (!is_string($item)) {
         throw new InvalidFundingProviderData(
-         strtr('Provider @provider: Github ID #@i provided does not appear validate.', [
-            '@provider' => $this->id(),
+         strtr('Github ID #@i provided does not appear validate.', [
             '@i' => ($i + 1),
           ])
         );
@@ -42,7 +41,7 @@ class GitHub extends FundingProviderBase {
    * {@inheritdoc}
    */
   public function build($data): array {
-    if (is_string($data)) {
+    if (!is_array($data)) {
       $data = [$data];
     }
 

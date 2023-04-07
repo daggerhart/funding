@@ -49,8 +49,9 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
    */
   public function rowsAreValid(array $rows): bool {
     $results = $this->validateRows($rows);
+    // Make a copy of the array where all values are TRUE.
     $test = array_combine(array_keys($results), array_fill(0, count($results), TRUE));
-    return $test == $rows;
+    return $test === $rows;
   }
 
   /**
