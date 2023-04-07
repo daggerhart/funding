@@ -32,6 +32,19 @@ interface FundingProviderInterface {
   public function description(): string;
 
   /**
+   * Validate the given data.
+   *
+   * @param string|array $data
+   *   Provider specific yaml content as data.
+   *
+   * @return bool
+   *   True if valid.
+   *
+   * @throws \Drupal\funding\Exception\InvalidFundingProviderData
+   */
+  public function validate($data): bool;
+
+  /**
    * @param string|array $data
    *
    * @return array

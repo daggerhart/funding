@@ -5,6 +5,7 @@ namespace Drupal\funding\Service;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\funding\Exception\InvalidFundingProviderData;
 
 class FundingProviderProcessor implements FundingProviderProcessorInterface {
 
@@ -38,6 +39,46 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
   /**
    * {@inheritdoc}
    */
+  public function yamlIsValid(string $yaml): bool {
+    $rows = Yaml::decode($yaml);
+    return $this->rowsAreValid($rows);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function rowsAreValid(array $rows): bool {
+    $results = $this->validateRows($rows);
+    $test = array_combine(array_keys($results), array_fill(0, count($results), TRUE));
+    return $test == $rows;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateRows(array $rows): array {
+    $validations = [];
+    foreach ($rows as $key => $row) {
+      try {
+        // The key for the row is the FundingProvider plugin id.
+        if (!$this->manager->hasDefinition($key)) {
+          $validations[$key] = new InvalidFundingProviderData('Provider plugin not found: '. $key);
+        }
+
+        $provider = $this->manager->createInstance($key);
+        $validations[$key] = $provider->validate($row);
+      }
+      catch (InvalidFundingProviderData $exception) {
+        $validations[$key] = $exception;
+      }
+    }
+
+    return $validations;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function process(array $rows): array {
     $build = [
       '#type' => 'container',
@@ -49,8 +90,13 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
         continue;
       }
 
-      $provider = $this->manager->createInstance($key);
-      $build[$key] = $provider->build($row);
+      try {
+        $provider = $this->manager->createInstance($key);
+        if ($provider->validate($row)) {
+          $build[$key] = $provider->build($row);
+        }
+      }
+      catch (InvalidFundingProviderData $exception) {}
     }
 
     return array_filter($build);

@@ -2,6 +2,8 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
+use Drupal\Core\Url;
+use Drupal\funding\Exception\InvalidFundingProviderData;
 use Drupal\funding\Plugin\Funding\FundingProviderBase;
 
 /**
@@ -14,6 +16,33 @@ use Drupal\funding\Plugin\Funding\FundingProviderBase;
  * )
  */
 class CustomUrl extends FundingProviderBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate($data): bool {
+    if (is_string($data)) {
+      $data = [$data];
+    }
+
+    foreach ($data as $i => $item) {
+      try {
+        Url::fromUri($item);
+      }
+      catch (\Exception $exception) {
+        throw new InvalidFundingProviderData(
+          strtr('Provider @provider: Custom Url #@i provided does not appear validate.', [
+            '@provider' => $this->id(),
+            '@i' => ($i + 1),
+          ]),
+          0,
+          $exception
+        );
+      }
+    }
+
+    return TRUE;
+  }
 
   /**
    * {@inheritdoc}

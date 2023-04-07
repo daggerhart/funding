@@ -3,11 +3,15 @@
 namespace Drupal\funding\Plugin\Funding;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\funding\Exception\InvalidFundingProviderData;
 
 /**
  * Base class for funding_provider plugins.
  */
 abstract class FundingProviderBase extends PluginBase implements FundingProviderInterface {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -34,6 +38,17 @@ abstract class FundingProviderBase extends PluginBase implements FundingProvider
   /**
    * {@inheritdoc}
    */
-  abstract public function build($data): array;
+  public function validate($data): bool {
+    if (!is_string($data)) {
+      throw new InvalidFundingProviderData(
+        strtr('Provider @provider: Expected a string, got @type instead.', [
+          '@provider' => $this->id(),
+          '@type' => gettype($data),
+        ])
+      );
+    }
+
+    return TRUE;
+  }
 
 }

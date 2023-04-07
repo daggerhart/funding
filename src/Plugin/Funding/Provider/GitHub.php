@@ -2,6 +2,7 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
+use Drupal\funding\Exception\InvalidFundingProviderData;
 use Drupal\funding\Plugin\Funding\FundingProviderBase;
 
 /**
@@ -14,6 +15,28 @@ use Drupal\funding\Plugin\Funding\FundingProviderBase;
  * )
  */
 class GitHub extends FundingProviderBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate($data): bool {
+    if (is_string($data)) {
+      $data = [$data];
+    }
+
+    foreach ($data as $i => $item) {
+      if (!is_string($item)) {
+        throw new InvalidFundingProviderData(
+         strtr('Provider @provider: Github ID #@i provided does not appear validate.', [
+            '@provider' => $this->id(),
+            '@i' => ($i + 1),
+          ])
+        );
+      }
+    }
+
+    return TRUE;
+  }
 
   /**
    * {@inheritdoc}

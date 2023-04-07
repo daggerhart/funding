@@ -2,11 +2,14 @@
 
 namespace Drupal\funding\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+use Drupal\funding\Service\FundingProviderProcessorInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'funding' widget.
@@ -22,6 +25,38 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 class FundingWidget extends WidgetBase {
 
   /**
+   * @var \Drupal\funding\Service\FundingProviderProcessorInterface
+   */
+  private FundingProviderProcessorInterface $providerProcessor;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($plugin_id, $plugin_definition, array $configuration, FundingProviderProcessorInterface $providerProcessor) {
+    $this->providerProcessor = $providerProcessor;
+
+    parent::__construct(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['third_party_settings']
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration,
+      $container->get('funding.provider_processor')
+    );
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
@@ -30,10 +65,7 @@ class FundingWidget extends WidgetBase {
       '#type' => 'textarea',
       '#default_value' => $value,
       '#element_validate' => [
-        [
-          static::class,
-          'validateFunding',
-        ],
+        [$this, 'validateFunding'],
       ],
       '#description' => $this->t(<<<YAML
         open_collective-embed:
@@ -54,45 +86,28 @@ class FundingWidget extends WidgetBase {
   /**
    * Validate the funding yaml field.
    */
-  public static function validateFunding(&$element, FormStateInterface $form_state, $form) {
-    $message = '';
+  public function validateFunding(&$element, FormStateInterface $form_state, $form) {
     $value = $element['#value'];
     if (strlen($value) === 0) {
       $form_state->setValueForElement($element, '');
       return;
     }
+
     try {
-      $items = Yaml::decode($value);
-//      // @todo allow other modules to validate based on provider names, maybe with annotations per provider name
-//      if (is_array($items)) {
-//        foreach ($items as $provider => $username) {
-//          if (is_array($username) && !isset($username['slug'])) {
-//            $message = t('No "slug:" provided for array: %provider',
-//              ['%provider', $provider]
-//            );
-//          }
-//          elseif (empty($username)) {
-//            $message = t('No username provided for provider: %provider',
-//              ['%provider', $provider]
-//            );
-//          }
-//        }
-//      }
-//      else {
-//        $message = t('Unable to parse the YAML array. Please check the format and try again.');
-//      }
+      $rows = Yaml::decode($value);
     }
-    catch (InvalidDataTypeException $e) {
-      $message = $e->getMessage();
-    }
-    catch (ParseException $e) {
-      $message = t('Unable to parse the YAML string: %message',
-        ['%message', $e->getMessage()]
-      );
+    catch (\Exception $exception) {
+      $form_state->setError($element, $this->t('Unable to parse the YAML string: %message', [
+        '%message', $exception->getMessage(),
+      ]));
     }
 
-    if ($message) {
-      $form_state->setError($element, $message);
+    $results = $this->providerProcessor->validateRows($rows);
+    foreach ($results as $result) {
+      if ($result !== TRUE) {
+        /** @var \Exception $result */
+        $form_state->setError($element, $result->getMessage());
+      }
     }
   }
 
