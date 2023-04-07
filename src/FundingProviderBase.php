@@ -7,7 +7,7 @@ use Drupal\Component\Plugin\PluginBase;
 /**
  * Base class for funding_provider plugins.
  */
-abstract class FundingProviderPluginBase extends PluginBase implements FundingProviderInterface {
+abstract class FundingProviderBase extends PluginBase implements FundingProviderInterface {
 
   /**
    * {@inheritdoc}

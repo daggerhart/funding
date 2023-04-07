@@ -2,7 +2,7 @@
 
 namespace Drupal\funding\Plugin\Funding\Provider;
 
-use Drupal\funding\FundingProviderPluginBase;
+use Drupal\funding\FundingProviderBase;
 
 /**
  * Plugin implementation of the funding_provider.
@@ -13,7 +13,7 @@ use Drupal\funding\FundingProviderPluginBase;
  *   description = @Translation("Handles processing for the issuehunt funding namespace.")
  * )
  */
-class IssueHunt extends FundingProviderPluginBase {
+class IssueHunt extends FundingProviderBase {
 
   /**
    * {@inheritdoc}
