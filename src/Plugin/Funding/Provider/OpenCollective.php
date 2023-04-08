@@ -15,6 +15,12 @@ use Drupal\funding\Plugin\Funding\FundingProviderBase;
  */
 class OpenCollective extends FundingProviderBase {
 
+  public function examples(): array {
+    return [
+      'open_collective: funding-tools',
+    ];
+  }
+
   /**
    * {@inheritdoc}
    */

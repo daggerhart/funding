@@ -21,13 +21,13 @@ class OpenCollectiveEmbedButton extends FundingProviderBase {
    */
   public function examples(): array {
     return [
-      'open_collective_button: COLLECTIVE_SLUG',
+      'open_collective_button: funding-tools',
       'open_collective_button:
-         collective: COLLECTIVE_SLUG
+         collective: funding-tools
          color: blue
          verb: contribute',
       'open_collective_button:
-         collective: COLLECTIVE_SLUG
+         collective: funding-tools
          color: white
          verb: donate',
     ];

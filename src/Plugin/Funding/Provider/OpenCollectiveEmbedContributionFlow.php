@@ -21,10 +21,10 @@ class OpenCollectiveEmbedContributionFlow extends FundingProviderBase {
    */
   public function examples(): array {
     return [
-      'open_collective_contribution_flow: COLLECTIVE_SLUG',
+      'open_collective_contribution_flow: funding-tools',
       'open_collective_contribution_flow:
-         collective: COLLECTIVE_SLUG
-         tier: TIER_SLUG',
+         collective: funding-tools
+         tier: backer-14068',
     ];
   }
 

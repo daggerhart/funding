@@ -21,10 +21,10 @@ class OpenCollectiveEmbedBanner extends FundingProviderBase {
    */
   public function examples(): array {
     return [
-      'open_collective_banner: COLLECTIVE_SLUG',
+      'open_collective_banner: funding-tools',
 
       'open_collective_banner:
-        collective: COLLECTIVE_SLUG
+        collective: funding-tools
         style:
           a:
             color: red
