@@ -1,27 +1,27 @@
 (function($, Drupal) {
 
   function showContainer() {
-    $('.funding-examples-container').show();
+    $('.funding-examples-all-container').show();
   }
 
   function hideContainer() {
-    $('.funding-examples-container').hide();
+    $('.funding-examples-all-container').hide();
   }
 
   function showAll() {
     showContainer();
-    $('.funding-example-container').show();
+    $('.funding-example-single-container').show();
   }
 
   function hideAll() {
     hideContainer();
-    $('.funding-example-container').hide();
+    $('.funding-example-single-container').hide();
   }
 
   function showProviderExamples(providerId) {
     hideAll();
     showContainer();
-    $('.funding-example-container--' + providerId).show();
+    $('.funding-example-single-container--' + providerId).show();
   }
 
   Drupal.behaviors.fundingexamplesForm = {

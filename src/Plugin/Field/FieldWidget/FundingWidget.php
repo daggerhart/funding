@@ -93,7 +93,7 @@ class FundingWidget extends WidgetBase {
       '#type' => 'container',
       '#attributes' => [
         'class' => [
-          'funding-examples-container',
+          'funding-examples-all-container',
         ],
       ],
     ];
@@ -103,9 +103,9 @@ class FundingWidget extends WidgetBase {
         '#type' => 'container',
         '#attributes' => [
           'class' => [
-            'funding-example-container',
-            'funding-example-container--all',
-            'funding-example-container--' . $provider_id,
+            'funding-example-single-container',
+            'funding-example-single-container--all',
+            'funding-example-single-container--' . $provider_id,
           ],
         ],
       ];

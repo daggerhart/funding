@@ -1,6 +1,6 @@
 
 textarea.funding-yaml-container,
-.funding-examples-container {
+.funding-examples-all-container {
   font-family: monospace;
   font-size: 14px;
   line-height: 22px;
@@ -22,7 +22,7 @@ textarea.funding-yaml-container,
 textarea.funding-yaml-container {
   color: black;
 }
-.funding-examples-container {
+.funding-examples-all-container {
   color: #666;
 }
 
