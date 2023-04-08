@@ -6,6 +6,7 @@
  */
 
 use Drupal\Component\Serialization\Json;
+use Drupal\oc_graphql_client\Plugin\OcQuery\CollectiveMembers;
 
 /**
  * Implements hook_theme().
@@ -17,6 +18,16 @@ function funding_theme($existing, $type, $theme, $path) {
         'provider' => NULL,
         'url' => NULL,
         'content' => NULL,
+      ],
+    ],
+    'funding_open_collective_api_members' => [
+      'variables' => [
+        'collective' => NULL,
+        'members_role' => 'CONTRIBUTOR',
+        'members_limit' => NULL,
+        // Customizing properties per-instance is disabled for now.
+        //'member_properties' => 'id slug name imageUrl',
+        'members' => [],
       ],
     ],
     'funding_open_collective_embed_banner' => [
@@ -51,6 +62,36 @@ function template_preprocess_funding_link(&$variables) {
   $variables['attributes'] = [
     'href' => $variables['url'],
   ];
+}
+
+/**
+ * Implements template_preprocess_HOOK().
+ */
+function template_preprocess_funding_open_collective_api_members(&$variables) {
+  //$variables['#attached']['library'][] = 'funding/open-collective-api-members';
+
+  /**
+   * @var \Drupal\oc_graphql_client\Service\GraphQLClientInterface $client
+   * @var \Drupal\oc_graphql_client\Service\OpenCollectiveEnums $enums
+   */
+  $client = \Drupal::service('oc_graphql_client.graphql_client');
+  $enums = \Drupal::service('oc_graphql_client.opencollective_enums');
+  $query = $client->queryPluginManager()->createInstance(CollectiveMembers::PLUGIN_ID);
+
+  // Validate the members_role.
+  $members_role = strtoupper($variables['members_role']);
+  if (!$enums->keyExists($members_role, $enums->memberRoles())) {
+    $members_role = 'CONTRIBUTOR';
+  }
+
+  $variables['members'] = $client->performQuery($query, [
+    'collective_slug' => $variables['collective'],
+    'members_role' => $members_role,
+    'members_limit' => $variables['members_limit'] ?? 20,
+    // Customizing properties per-instance is disabled for now.
+    //'member_properties' => $variables['member_properties'],
+    'member_properties' => 'id slug name imageUrl',
+  ]);
 }
 
 /**
