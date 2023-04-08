@@ -71,10 +71,10 @@ function template_preprocess_funding_open_collective_api_members(&$variables) {
   //$variables['#attached']['library'][] = 'funding/open-collective-api-members';
 
   /**
-   * @var \Drupal\oc_graphql_client\Service\GraphQLClientInterface $client
+   * @var \Drupal\oc_graphql_client\Service\OpenCollectiveClientInterface $client
    * @var \Drupal\oc_graphql_client\Service\OpenCollectiveEnums $enums
    */
-  $client = \Drupal::service('oc_graphql_client.graphql_client');
+  $client = \Drupal::service('oc_graphql_client.opencollective_client');
   $enums = \Drupal::service('oc_graphql_client.opencollective_enums');
   $query = $client->queryPluginManager()->createInstance(CollectiveMembers::PLUGIN_ID);
 

@@ -3,7 +3,7 @@
 namespace Drupal\funding\Plugin\Funding;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\oc_graphql_client\Service\GraphQLClient;
+use Drupal\oc_graphql_client\Service\OpenCollectiveClient;
 use Drupal\oc_graphql_client\Service\OpenCollectiveEnums;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -12,9 +12,9 @@ abstract class FundingProviderOpenCollectiveBase extends FundingProviderBase imp
   /**
    * Client.
    *
-   * @var \Drupal\oc_graphql_client\Service\GraphQLClient
+   * @var \Drupal\oc_graphql_client\Service\OpenCollectiveClient
    */
-  protected GraphQLClient $openCollectiveClient;
+  protected OpenCollectiveClient $openCollectiveClient;
 
   /**
    * Enums helper.
@@ -32,12 +32,12 @@ abstract class FundingProviderOpenCollectiveBase extends FundingProviderBase imp
    *   Plugin ID.
    * @param $plugin_definition
    *   Plugin definition.
-   * @param \Drupal\oc_graphql_client\Service\GraphQLClient $openCollectiveClient
+   * @param \Drupal\oc_graphql_client\Service\OpenCollectiveClient $openCollectiveClient
    *   Client.
    * @param \Drupal\oc_graphql_client\Service\OpenCollectiveEnums $openCollectiveEnums
    *   Enums helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, GraphQLClient $openCollectiveClient, OpenCollectiveEnums $openCollectiveEnums) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, OpenCollectiveClient $openCollectiveClient, OpenCollectiveEnums $openCollectiveEnums) {
     $this->openCollectiveClient = $openCollectiveClient;
     $this->openCollectiveEnums = $openCollectiveEnums;
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -51,7 +51,7 @@ abstract class FundingProviderOpenCollectiveBase extends FundingProviderBase imp
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('oc_graphql_client.graphql_client'),
+      $container->get('oc_graphql_client.opencollective_client'),
       $container->get('oc_graphql_client.opencollective_enums')
     );
   }
