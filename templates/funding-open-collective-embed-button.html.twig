@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display an open collective button.
+ *
+ * Available variables:
+ * - provider: Provider plugin id.
+ * - collective: Collective slug.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'funding-open-collective-embed-button',
+  ]
+%}
+<script {{ attributes.addClass(classes) }}></script>

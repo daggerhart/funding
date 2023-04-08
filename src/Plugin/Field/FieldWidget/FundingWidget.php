@@ -165,6 +165,7 @@ class FundingWidget extends WidgetBase {
     }
 
     $valid = FALSE;
+    $rows = [];
     try {
       $rows = Yaml::decode($value);
       $valid = $this->providerProcessor->rowsAreValid($rows);
@@ -175,14 +176,16 @@ class FundingWidget extends WidgetBase {
       ]));
     }
 
-    $results = $this->providerProcessor->validateRows($rows);
-    foreach ($results as $key => $result) {
-      if ($result !== TRUE) {
-        /** @var \Exception $result */
-        $this->messenger()->addError($this->t('Provider @provider: @message', [
-          '@provider' => $key,
-          '@message' => $result->getMessage()
-        ]));
+    if ($rows) {
+      $results = $this->providerProcessor->validateRows($rows);
+      foreach ($results as $key => $result) {
+        if ($result !== TRUE) {
+          /** @var \Exception $result */
+          $this->messenger()->addError($this->t('Provider @provider: @message', [
+            '@provider' => $key,
+            '@message' => $result->getMessage()
+          ]));
+        }
       }
     }
 
