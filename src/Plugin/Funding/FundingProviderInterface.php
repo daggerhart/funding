@@ -53,6 +53,16 @@ interface FundingProviderInterface {
   public function validate($data): bool;
 
   /**
+   * Whether the funding provider plugin has everything it needs to work
+   * correctly. For example, if a provider requires an API key, then the
+   * provider should ensure that key exists before returning TRUE.
+   *
+   * @return bool
+   *   True if provider is ready to work.
+   */
+  public function isReady(): bool;
+
+  /**
    * @param string|array $data
    *
    * @return array

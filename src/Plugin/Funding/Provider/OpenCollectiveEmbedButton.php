@@ -3,7 +3,7 @@
 namespace Drupal\funding\Plugin\Funding\Provider;
 
 use Drupal\funding\Exception\InvalidFundingProviderData;
-use Drupal\funding\Plugin\Funding\FundingProviderBase;
+use Drupal\funding\Plugin\Funding\FundingProviderOpenCollectiveBase;
 
 /**
  * Plugin implementation of the funding_provider.
@@ -14,7 +14,7 @@ use Drupal\funding\Plugin\Funding\FundingProviderBase;
  *   description = @Translation("Handles processing for the open_collective_button funding namespace.")
  * )
  */
-class OpenCollectiveEmbedButton extends FundingProviderBase {
+class OpenCollectiveEmbedButton extends FundingProviderOpenCollectiveBase {
 
   /**
    * {@inheritdoc}
@@ -37,13 +37,22 @@ class OpenCollectiveEmbedButton extends FundingProviderBase {
    * {@inheritdoc}
    */
   public function validate($data): bool {
-    if (!is_string($data) && !is_array($data)) {
-      throw new InvalidFundingProviderData('Expected string or array, got ' . gettype($data) . ' instead');
-    }
+    parent::validate($data);
 
     if (is_array($data)) {
-      if (!isset($data['collective']) || !is_string($data['collective'])) {
-        throw new InvalidFundingProviderData('Expected string for collective property, got '. gettype($data['collective']) . 'instead.');
+      $this->validateOptionalPropertyIsString($data, 'color');
+      $this->validateOptionalPropertyIsString($data, 'verb');
+
+      if (isset($data['color'])) {
+        if (!$this->openCollectiveEnums->keyExists($data['color'], $this->openCollectiveEnums->embedButtonColors())) {
+          throw new InvalidFundingProviderData("{$data['color']} is not a valid button color. Valid button colors are: " . implode(', ', array_keys($this->openCollectiveEnums->embedButtonColors())));
+        }
+      }
+
+      if (isset($data['verb'])) {
+        if (!$this->openCollectiveEnums->keyExists($data['verb'], $this->openCollectiveEnums->embedButtonVerbs())) {
+          throw new InvalidFundingProviderData("{$data['verb']} is not a valid button verb. Valid button verbs are: " . implode(', ', array_keys($this->openCollectiveEnums->embedButtonVerbs())));
+        }
       }
     }
 

@@ -3,7 +3,7 @@
 namespace Drupal\funding\Plugin\Funding\Provider;
 
 use Drupal\funding\Exception\InvalidFundingProviderData;
-use Drupal\funding\Plugin\Funding\FundingProviderBase;
+use Drupal\funding\Plugin\Funding\FundingProviderOpenCollectiveBase;
 
 /**
  * Plugin implementation of the funding_provider.
@@ -14,7 +14,7 @@ use Drupal\funding\Plugin\Funding\FundingProviderBase;
  *   description = @Translation("Handles processing for the open_collective_members funding namespace.")
  * )
  */
-class OpenCollectiveApiMembers extends FundingProviderBase {
+class OpenCollectiveApiMembers extends FundingProviderOpenCollectiveBase {
 
   /**
    * {@inheritdoc}
@@ -33,17 +33,27 @@ class OpenCollectiveApiMembers extends FundingProviderBase {
    * {@inheritdoc}
    */
   public function validate($data): bool {
-    if (!is_string($data) && !is_array($data)) {
-      throw new InvalidFundingProviderData('Expected string or array, got ' . gettype($data) . ' instead');
-    }
+    parent::validate($data);
 
     if (is_array($data)) {
-      if (!isset($data['collective']) || !is_string($data['collective'])) {
-        throw new InvalidFundingProviderData('Expected string for collective property, got '. gettype($data['collective']) . 'instead.');
+      $this->validateOptionalPropertyIsString($data, 'members_role');
+      $this->validateOptionalPropertyIsInteger($data, 'members_limit');
+
+      if (isset($data['members_role'])) {
+        if (!$this->openCollectiveEnums->keyExists($data['members_role'], $this->openCollectiveEnums->memberRoles())) {
+          throw new InvalidFundingProviderData("{$data['members_role']} is not a valid Open Collective member role. Valid members_role values: " . implode(', ', array_keys($this->openCollectiveEnums->memberRoles())));
+        }
       }
     }
 
     return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isReady(): bool {
+    return $this->openCollectiveClient->isReady();
   }
 
   /**

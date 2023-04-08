@@ -93,7 +93,7 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
 
       try {
         $provider = $this->manager->getProvider($provider_id);
-        if ($provider->validate($row)) {
+        if ($provider->isReady() && $provider->validate($row)) {
           $build[$provider_id] = $provider->build($row);
         }
       }
