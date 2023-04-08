@@ -1,15 +1,26 @@
 (function($, Drupal) {
 
+  function showContainer() {
+    $('.funding-examples-container').show();
+  }
+
+  function hideContainer() {
+    $('.funding-examples-container').hide();
+  }
+
   function showAll() {
+    showContainer();
     $('.funding-example-container').show();
   }
 
   function hideAll() {
+    hideContainer();
     $('.funding-example-container').hide();
   }
 
   function showProviderExamples(providerId) {
     hideAll();
+    showContainer();
     $('.funding-example-container--' + providerId).show();
   }
 
@@ -23,7 +34,13 @@
       showProviderExamples($examplesSelect.val());
 
       $examplesSelect.on('change', function (event) {
-        showProviderExamples($(this).val());
+        const providerId = $(this).val();
+        if (providerId === '0') {
+          hideAll();
+          return;
+        }
+
+        showProviderExamples(providerId);
       });
     }
   }
