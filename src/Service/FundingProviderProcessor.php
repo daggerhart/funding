@@ -51,7 +51,7 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
     $results = $this->validateRows($rows);
     // Make a copy of the array where all values are TRUE.
     $test = array_combine(array_keys($results), array_fill(0, count($results), TRUE));
-    return $test === $rows;
+    return $test === $results;
   }
 
   /**
@@ -59,18 +59,18 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
    */
   public function validateRows(array $rows): array {
     $validations = [];
-    foreach ($rows as $key => $row) {
+    foreach ($rows as $provider_id => $row) {
       try {
         // The key for the row is the FundingProvider plugin id.
-        if (!$this->manager->hasDefinition($key)) {
-          $validations[$key] = new InvalidFundingProviderData('Provider plugin not found: '. $key);
+        if (!$this->manager->hasDefinition($provider_id)) {
+          $validations[$provider_id] = new InvalidFundingProviderData('Provider plugin not found: '. $provider_id);
         }
 
-        $provider = $this->manager->createInstance($key);
-        $validations[$key] = $provider->validate($row);
+        $provider = $this->manager->getProvider($provider_id);
+        $validations[$provider_id] = $provider->validate($row);
       }
       catch (InvalidFundingProviderData $exception) {
-        $validations[$key] = $exception;
+        $validations[$provider_id] = $exception;
       }
     }
 
@@ -85,16 +85,16 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
       '#type' => 'container',
     ];
 
-    foreach ($rows as $key => $row) {
+    foreach ($rows as $provider_id => $row) {
       // The key for the row is the FundingProvider plugin id.
-      if (!$this->manager->hasDefinition($key)) {
+      if (!$this->manager->hasDefinition($provider_id)) {
         continue;
       }
 
       try {
-        $provider = $this->manager->createInstance($key);
+        $provider = $this->manager->getProvider($provider_id);
         if ($provider->validate($row)) {
-          $build[$key] = $provider->build($row);
+          $build[$provider_id] = $provider->build($row);
         }
       }
       catch (InvalidFundingProviderData $exception) {}

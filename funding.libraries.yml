@@ -1,0 +1,11 @@
+examples-form:
+  version: 0.1
+  css:
+    theme:
+      css/examples-form.css: {}
+  js:
+    js/examples-form.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once

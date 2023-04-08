@@ -20,6 +20,19 @@ class CustomUrl extends FundingProviderBase {
   /**
    * {@inheritdoc}
    */
+  public function examples(): array {
+    return [
+      'custom: "https://drupal.org"',
+      'custom: ["https://drupal.org", "https://drupal.org/project/funding"]',
+      'custom:
+        - "https://drupal.org"
+        - "https://drupal.org/project/funding"',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function validate($data): bool {
     if (!is_array($data)) {
       $data = [$data];

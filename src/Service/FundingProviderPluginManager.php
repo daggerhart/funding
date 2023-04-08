@@ -12,6 +12,8 @@ use Drupal\funding\Plugin\Funding\FundingProviderInterface;
  */
 class FundingProviderPluginManager extends DefaultPluginManager {
 
+  private array $cache = [];
+
   /**
    * Constructs FundingProviderPluginManager object.
    *
@@ -50,6 +52,34 @@ class FundingProviderPluginManager extends DefaultPluginManager {
    */
   public function createInstance($plugin_id, array $configuration = []): FundingProviderInterface {
     return parent::createInstance($plugin_id, $configuration);
+  }
+
+  /**
+   * @return \Drupal\funding\Plugin\Funding\FundingProviderInterface[]
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   */
+  public function getProviders(): array {
+    $instances = [];
+    foreach ($this->getDefinitions() as $plugin_id => $definition) {
+      $instances[$plugin_id] = $this->getProvider($plugin_id);
+    }
+    return $instances;
+  }
+
+  /**
+   * @param string $plugin_id
+   * @param array $configuration
+   *
+   * @return \Drupal\funding\Plugin\Funding\FundingProviderInterface
+   * @throws \Drupal\Component\Plugin\Exception\PluginException
+   */
+  public function getProvider(string $plugin_id, array $configuration = []): FundingProviderInterface {
+    $cid = md5(serialize([$plugin_id, $configuration]));
+    if (array_key_exists($cid, $this->cache)) {
+      return $this->cache[$cid];
+    }
+
+    return $this->cache[$cid] = $this->createInstance($plugin_id, $configuration);
   }
 
 }

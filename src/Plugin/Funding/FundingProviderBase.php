@@ -38,6 +38,15 @@ abstract class FundingProviderBase extends PluginBase implements FundingProvider
   /**
    * {@inheritdoc}
    */
+  public function examples(): array {
+    return [
+      "{$this->id()}: " . strtoupper($this->id()) . "_ID",
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function validate($data): bool {
     if (!is_string($data)) {
       throw new InvalidFundingProviderData(

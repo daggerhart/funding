@@ -2,12 +2,12 @@
 
 namespace Drupal\funding\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+use Drupal\funding\Service\FundingProviderPluginManager;
 use Drupal\funding\Service\FundingProviderProcessorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -30,10 +30,20 @@ class FundingWidget extends WidgetBase {
   private FundingProviderProcessorInterface $providerProcessor;
 
   /**
-   * {@inheritdoc}
+   * @var \Drupal\funding\Service\FundingProviderPluginManager
    */
-  public function __construct($plugin_id, $plugin_definition, array $configuration, FundingProviderProcessorInterface $providerProcessor) {
+  private FundingProviderPluginManager $manager;
+
+
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    array $configuration,
+    FundingProviderProcessorInterface $providerProcessor,
+    FundingProviderPluginManager $manager
+  ) {
     $this->providerProcessor = $providerProcessor;
+    $this->manager = $manager;
 
     parent::__construct(
       $plugin_id,
@@ -52,7 +62,8 @@ class FundingWidget extends WidgetBase {
       $plugin_id,
       $plugin_definition,
       $configuration,
-      $container->get('funding.provider_processor')
+      $container->get('funding.provider_processor'),
+      $container->get('plugin.manager.funding_provider')
     );
   }
 
@@ -67,20 +78,81 @@ class FundingWidget extends WidgetBase {
       '#element_validate' => [
         [$this, 'validateFunding'],
       ],
-      '#description' => $this->t(<<<YAML
-        open_collective-embed:
-            type: button
-            slug: funding-tools
-            verb: donate
-            color: blue
-        open_collective-embed:
-            type: image
-            slug: funding-tools
-            verb: contribute
-            color: white
-        YAML),
+      '#rows' => 8,
+      '#attributes' => [
+        'class' => [
+          'funding-yaml-container',
+        ],
+      ],
     ];
-    return ['value' => $element];
+
+    $example_options = [
+      'all' => $this->t('All'),
+    ];
+    $examples_render = [
+      '#type' => 'container',
+      '#attributes' => [
+        'class' => [
+          'funding-examples-container',
+        ],
+      ],
+    ];
+    foreach ($this->manager->getProviders() as $provider_id => $provider) {
+      $example_options[$provider_id] = $provider->label();
+      $provider_examples_render = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => [
+            'funding-example-container',
+            'funding-example-container--all',
+            'funding-example-container--' . $provider_id,
+          ],
+        ],
+      ];
+      foreach ($provider->examples() as $i => $example_content) {
+        if (str_contains($example_content, "\n")) {
+          $example_content = Yaml::encode(Yaml::decode($example_content));
+        }
+
+        $line_break = (array_key_last($provider->examples()) !== $i) ? "\n" : '';
+
+        $example_content_render = [
+          '#type' => 'html_tag',
+          '#tag' => 'span',
+          '#value' => Markup::create("<span>{$example_content}</span>{$line_break}"),
+          '#attributes' => [
+            'class' => [
+              'funding-example',
+              'funding-example--' . $provider_id,
+              'funding-example--' . $provider_id . '--' . $i,
+            ],
+          ],
+        ];
+
+        $provider_examples_render[$provider_id . '_' . $i] = $example_content_render;
+      }
+
+      $examples_render[$provider_id] = $provider_examples_render;
+    }
+
+    return [
+      'value' => $element,
+      'examples_select' => [
+        '#type' => 'select',
+        '#title' => $this->t('Funding Examples'),
+        '#attributes' => [
+          'class' => ['funding-examples-select'],
+        ],
+        '#options' => $example_options,
+        '#empty_value' => 0,
+        '#attached' => [
+          'library' => [
+            'funding/examples-form'
+          ],
+        ],
+      ],
+      'examples' => $examples_render,
+    ];
   }
 
   /**

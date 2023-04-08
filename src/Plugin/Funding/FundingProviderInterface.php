@@ -32,6 +32,14 @@ interface FundingProviderInterface {
   public function description(): string;
 
   /**
+   * Get an array of example Yaml implementations.
+   *
+   * @return string[]
+   *   Array of example Yaml implementations of the provider.
+   */
+  public function examples(): array;
+
+  /**
    * Validate the given data.
    *
    * @param string|array $data
