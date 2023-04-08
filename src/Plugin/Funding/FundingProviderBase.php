@@ -40,7 +40,7 @@ abstract class FundingProviderBase extends PluginBase implements FundingProvider
    */
   public function examples(): array {
     return [
-      "{$this->id()}: " . strtoupper($this->id()) . "_ID",
+      "{$this->id()}: " . strtoupper($this->id()) . "_SLUG",
     ];
   }
 

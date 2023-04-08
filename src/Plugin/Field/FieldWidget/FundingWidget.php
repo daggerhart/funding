@@ -111,15 +111,13 @@ class FundingWidget extends WidgetBase {
       ];
       foreach ($provider->examples() as $i => $example_content) {
         if (str_contains($example_content, "\n")) {
-          $example_content = Yaml::encode(Yaml::decode($example_content));
+          $example_content = Yaml::encode(Yaml::decode(trim($example_content)));
         }
-
-        $line_break = (array_key_last($provider->examples()) !== $i) ? "\n" : '';
 
         $example_content_render = [
           '#type' => 'html_tag',
           '#tag' => 'span',
-          '#value' => Markup::create("<span>{$example_content}</span>{$line_break}"),
+          '#value' => Markup::create("<span>{$example_content}</span>"),
           '#attributes' => [
             'class' => [
               'funding-example',
@@ -135,6 +133,7 @@ class FundingWidget extends WidgetBase {
       $examples_render[$provider_id] = $provider_examples_render;
     }
 
+    ksort($example_options);
     return [
       'value' => $element,
       'examples_select' => [
