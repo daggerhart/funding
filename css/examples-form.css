@@ -15,14 +15,14 @@ textarea.funding-yaml-container,
     rgb(250, 250, 250) calc(50% + 1px),
     rgb(250, 250, 250) 100%
   );
-  background-size: 33.00px 33.00px;
+  background-size: 33.50px 33.50px;
 }
 
 textarea.funding-yaml-container {
   color: black;
 }
 .funding-examples-all-container {
-  color: #666;
+  color: #555;
 }
 
 .funding-example {

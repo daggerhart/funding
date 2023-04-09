@@ -5,9 +5,6 @@
  * Provide a field to store and display crowdfunding links and widgets.
  */
 
-use Drupal\Component\Serialization\Json;
-use Drupal\oc_graphql_client\Plugin\OcQuery\CollectiveMembers;
-
 /**
  * Implements hook_theme().
  */
@@ -18,38 +15,6 @@ function funding_theme($existing, $type, $theme, $path) {
         'provider' => NULL,
         'url' => NULL,
         'content' => NULL,
-      ],
-    ],
-    'funding_open_collective_api_members' => [
-      'variables' => [
-        'collective' => NULL,
-        'members_role' => 'CONTRIBUTOR',
-        'members_limit' => NULL,
-        // Customizing properties per-instance is disabled for now.
-        //'member_properties' => 'id slug name imageUrl',
-        'members' => [],
-      ],
-    ],
-    'funding_open_collective_embed_banner' => [
-      'variables' => [
-        'provider' => NULL,
-        'collective' => NULL,
-        'style' => [],
-      ],
-    ],
-    'funding_open_collective_embed_button' => [
-      'variables' => [
-        'provider' => NULL,
-        'collective' => NULL,
-        'color' => 'blue',
-        'verb' => 'donate'
-      ],
-    ],
-    'funding_open_collective_embed_contribution_flow' => [
-      'variables' => [
-        'provider' => NULL,
-        'collective' => NULL,
-        'tier' => NULL,
       ],
     ],
   ];
@@ -63,84 +28,3 @@ function template_preprocess_funding_link(&$variables) {
     'href' => $variables['url'],
   ];
 }
-
-/**
- * Implements template_preprocess_HOOK().
- */
-function template_preprocess_funding_open_collective_api_members(&$variables) {
-  //$variables['#attached']['library'][] = 'funding/open-collective-api-members';
-
-  /**
-   * @var \Drupal\oc_graphql_client\Service\OpenCollectiveClientInterface $client
-   * @var \Drupal\oc_graphql_client\Service\OpenCollectiveEnums $enums
-   */
-  $client = \Drupal::service('oc_graphql_client.opencollective_client');
-  $enums = \Drupal::service('oc_graphql_client.opencollective_enums');
-  $query = $client->queryPluginManager()->createInstance(CollectiveMembers::PLUGIN_ID);
-
-  // Validate the members_role.
-  $members_role = strtoupper($variables['members_role']);
-  if (!$enums->keyExists($members_role, $enums->memberRoles())) {
-    $members_role = 'CONTRIBUTOR';
-  }
-
-  $variables['members'] = $client->performQuery($query, [
-    'collective_slug' => $variables['collective'],
-    'members_role' => $members_role,
-    'members_limit' => $variables['members_limit'] ?? 20,
-    // Customizing properties per-instance is disabled for now.
-    //'member_properties' => $variables['member_properties'],
-    'member_properties' => 'id slug name imageUrl',
-  ]);
-}
-
-/**
- * Implements template_preprocess_HOOK().
- *
- * @link https://docs.opencollective.com/help/collectives/widgets
- */
-function template_preprocess_funding_open_collective_embed_banner(&$variables) {
-  $query = '';
-  if ($variables['style']) {
-    $query = '?style=' . Json::encode($variables['style']);
-  }
-
-  $variables['attributes']['src'] = "https://opencollective.com/{$variables['collective']}/banner.js" . $query;
-}
-
-/**
- * Implements template_preprocess_HOOK().
- *
- * @link https://docs.opencollective.com/help/collectives/widgets
- */
-function template_preprocess_funding_open_collective_embed_button(&$variables) {
-  // Enforce limited options.
-  $colors = ['blue','white'];
-  if (!in_array($variables['color'], $colors)) {
-    $variables['color'] = $colors[0];
-  }
-
-  $verbs = ['donate', 'contribute'];
-  if (!in_array($variables['verb'], $verbs)) {
-    $variables['verb'] = $verbs[0];
-  }
-
-  $variables['attributes']['src'] = "https://opencollective.com/{$variables['collective']}/{$variables['verb']}/button.js";
-  $variables['attributes']['color'] = $variables['color'];
-}
-
-/**
- * Implements template_preprocess_HOOK().
- *
- * @link https://docs.opencollective.com/help/collectives/contribution-flow
- */
-function template_preprocess_funding_open_collective_embed_contribution_flow(&$variables) {
-  // Handle the url difference between default and specific tiers.
-  $variables['attributes']['src'] = "https://opencollective.com/embed/{$variables['collective']}/donate";
-  $variables['attributes']['style'] = 'width: 100%; min-height: 100vh;';
-
-  if ($variables['tier']) {
-    $variables['attributes']['src'] = "https://opencollective.com/embed/{$variables['collective']}/contribute/{$variables['tier']}";
-  }
-}
-

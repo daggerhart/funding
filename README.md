@@ -9,7 +9,7 @@ Once you get the module [installed](https://www.drupal.org/docs/extending-drupal
 1. Visit Admin > Structure > Content Types > [your content type] > Manage Fields.
 2. Add a new field of type "Funding Yaml".
 3. Leave the default widget "Funding".
-4. On the "Manage Display" screen, choose between "Funding text box" or "Funding buttons".
+4. On the "Manage Display" screen, choose between "Funding Processor".
 5. Create a piece of content with the content type you set up.
 
 ### Configuration Instructions
