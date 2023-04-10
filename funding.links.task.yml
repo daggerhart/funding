@@ -1,0 +1,11 @@
+funding.settings:
+  route_name: funding.settings
+  title: Settings
+  base_route: funding.top_level
+  weight: 0
+
+funding.gallery:
+  route_name: funding.gallery
+  title: Gallery
+  base_route: funding.top_level
+  weight: 1

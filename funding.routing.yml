@@ -1,0 +1,23 @@
+funding.top_level:
+  path: '/admin/config/funding'
+  defaults:
+    _title: 'Funding'
+    _form: 'Drupal\funding\Form\SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+funding.settings:
+  path: '/admin/config/funding/settings'
+  defaults:
+    _title: 'Settings'
+    _form: 'Drupal\funding\Form\SettingsForm'
+  requirements:
+    _permission: 'administer site configuration'
+
+funding.gallery:
+  path: '/admin/config/funding/gallery'
+  defaults:
+    _title: 'Gallery'
+    _controller: '\Drupal\funding\Controller\GalleryController::build'
+  requirements:
+    _permission: 'administer site configuration'
