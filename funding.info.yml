@@ -5,4 +5,3 @@ package: Fields
 core_version_requirement: ^8 || ^9 || ^10
 dependencies:
   - 'drupal:field'
-  - 'oc_graphql_client:oc_graphql_client'

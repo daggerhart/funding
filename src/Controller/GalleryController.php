@@ -57,49 +57,28 @@ class GalleryController extends ControllerBase {
   public function build() {
 
     $rows = [];
-    foreach ($this->pluginManager->getProviders() as $provider_id => $provider) {
-      foreach ($provider->examples() as $i => $example_content) {
-        $example_data = Yaml::decode($example_content);
-        if (str_contains($example_content, "\n")) {
-          $example_content = Yaml::encode(Yaml::decode($example_content));
-        }
-
+    foreach ($this->pluginManager->getProviders() as $provider) {
+      foreach ($provider->examples() as $example_content) {
         if (!$provider->isReady()) {
           continue;
         }
 
-
         $example = [
           '#type' => 'fieldset',
           '#title' => $provider->label(),
-          //'#description' => $provider->description(),
-          //'#description_display' => 'after',
           '#collapsible' => FALSE,
           '#collapsed' => FALSE,
           '#attributes' => [
-            'id' => 'funding-provider--' . $provider_id,
+            'id' => 'funding-provider--' . $provider->id(),
           ],
           'example' => [
-            '#type' => 'container',
-            '#attributes' => [
-              'class' => ['funding-examples-all-container'],
-            ],
-            'yaml' => [
-              '#type' => 'html_tag',
-              '#tag' => 'span',
-              '#value' => Markup::create("<span>{$example_content}</span>"),
-              '#attributes' => [
-                'class' => [
-                  'funding-example',
-                  'funding-example--' . $provider_id,
-                  'funding-example--' . $provider_id . '--' . $i,
-                ],
-              ],
-            ],
+            '#theme' => 'funding_examples_container',
+            '#providers' => [$provider],
           ],
         ];
 
-        $widget = $provider->build($example_data[$provider_id]);
+        $example_data = Yaml::decode($example_content);
+        $widget = $provider->build($example_data[$provider->id()]);
 
         $rows[] = [
           ['data' => $example], ['data' => $widget],

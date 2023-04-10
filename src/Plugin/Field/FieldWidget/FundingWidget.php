@@ -90,47 +90,11 @@ class FundingWidget extends WidgetBase {
       'all' => $this->t('All'),
     ];
     $examples_render = [
-      '#type' => 'container',
-      '#attributes' => [
-        'class' => [
-          'funding-examples-all-container',
-        ],
-      ],
+      '#theme' => 'funding_examples_container',
+      '#providers' => $this->manager->getProviders(),
     ];
-    foreach ($this->manager->getProviders() as $provider_id => $provider) {
-      $example_options[$provider_id] = $provider->label();
-      $provider_examples_render = [
-        '#type' => 'container',
-        '#attributes' => [
-          'class' => [
-            'funding-example-single-container',
-            'funding-example-single-container--all',
-            'funding-example-single-container--' . $provider_id,
-          ],
-        ],
-      ];
-      foreach ($provider->examples() as $i => $example_content) {
-        if (str_contains($example_content, "\n")) {
-          $example_content = Yaml::encode(Yaml::decode(trim($example_content)));
-        }
-
-        $example_content_render = [
-          '#type' => 'html_tag',
-          '#tag' => 'span',
-          '#value' => Markup::create("<span>{$example_content}</span>"),
-          '#attributes' => [
-            'class' => [
-              'funding-example',
-              'funding-example--' . $provider_id,
-              'funding-example--' . $provider_id . '--' . $i,
-            ],
-          ],
-        ];
-
-        $provider_examples_render[$provider_id . '_' . $i] = $example_content_render;
-      }
-
-      $examples_render[$provider_id] = $provider_examples_render;
+    foreach ($this->manager->getProviders() as $provider) {
+      $example_options[$provider->id()] = $provider->label();
     }
 
     ksort($example_options);

@@ -5,11 +5,26 @@
  * Provide a field to store and display crowdfunding links and widgets.
  */
 
+use Drupal\Core\Serialization\Yaml;
+
 /**
  * Implements hook_theme().
  */
 function funding_theme($existing, $type, $theme, $path) {
   return [
+    'funding_example' => [
+      'variables' => [
+        'provider' => NULL,
+        'content' => NULL,
+        'index' => 0,
+      ],
+    ],
+    'funding_examples_container' => [
+      'variables' => [
+        'providers' => [],
+        'examples' => [],
+      ],
+    ],
     'funding_link' => [
       'variables' => [
         'provider' => NULL,
@@ -18,6 +33,43 @@ function funding_theme($existing, $type, $theme, $path) {
       ],
     ],
   ];
+}
+
+/**
+ * Implements template_preprocess_hook().
+ */
+function template_preprocess_funding_example(&$variables) {
+  $variables['#attached']['library'][] = 'funding/examples-form';
+
+  if (str_contains($variables['content'], "\n")) {
+    $variables['content'] = Yaml::encode(Yaml::decode($variables['content']));
+  }
+}
+
+/**
+ * Implements template_preprocess_hook().
+ */
+function template_preprocess_funding_examples_container(&$variables) {
+  // If not showing examples for specific providers, show all examples.
+  if (!$variables['providers']) {
+    /** @var \Drupal\funding\Service\FundingProviderPluginManager $plugin_manager */
+    $plugin_manager = \Drupal::service('plugin.manager.funding_provider');
+    $variables['providers'] = $plugin_manager->getProviders();
+  }
+
+  $variables['#attached']['library'][] = 'funding/examples-form';
+  $variables['examples'] = [];
+
+  foreach ($variables['providers'] as $provider) {
+    foreach ($provider->examples() as $index => $example_content) {
+      $variables['examples'][$provider->id() . '_' . $index] = [
+        '#theme' => 'funding_example',
+        '#provider' => $provider->id(),
+        '#content' => $example_content,
+        '#index' => $index,
+      ];
+    }
+  }
 }
 
 /**

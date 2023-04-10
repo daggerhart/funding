@@ -10,18 +10,18 @@
 
   function showAll() {
     showContainer();
-    $('.funding-example-single-container').show();
+    $('.funding-example').show();
   }
 
   function hideAll() {
     hideContainer();
-    $('.funding-example-single-container').hide();
+    $('.funding-example').hide();
   }
 
   function showProviderExamples(providerId) {
     hideAll();
     showContainer();
-    $('.funding-example-single-container--' + providerId).show();
+    $('.funding-example--' + providerId).show();
   }
 
   Drupal.behaviors.fundingexamplesForm = {
@@ -37,6 +37,10 @@
         const providerId = $(this).val();
         if (providerId === '0') {
           hideAll();
+          return;
+        }
+        if (providerId === 'all') {
+          showAll();
           return;
         }
 
