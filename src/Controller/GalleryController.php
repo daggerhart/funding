@@ -58,7 +58,7 @@ class GalleryController extends ControllerBase {
 
     $rows = [];
     foreach ($this->pluginManager->getProviders() as $provider) {
-      foreach ($provider->examples() as $example_content) {
+      foreach ($provider->examples() as $i => $example_content) {
         if (!$provider->isReady()) {
           continue;
         }
@@ -71,9 +71,17 @@ class GalleryController extends ControllerBase {
           '#attributes' => [
             'id' => 'funding-provider--' . $provider->id(),
           ],
-          'example' => [
-            '#theme' => 'funding_examples_container',
-            '#providers' => [$provider],
+          'container' => [
+            '#type' => 'container',
+            '#attributes' => [
+              'class' => ['funding-examples-all-container'],
+            ],
+            'example' => [
+              '#theme' => 'funding_example',
+              '#provider' => $provider->id(),
+              '#content' => $example_content,
+              '#index' => $i,
+            ],
           ],
         ];
 
