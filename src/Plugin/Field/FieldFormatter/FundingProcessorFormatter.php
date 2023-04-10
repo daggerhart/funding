@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Plugin implementation of the 'Funding Processor' formatter.
  *
  * @FieldFormatter(
- *   id = "funding_funding_processor",
+ *   id = "funding_processor",
  *   label = @Translation("Funding Processor"),
  *   field_types = {
  *     "funding"
