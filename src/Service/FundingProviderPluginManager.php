@@ -3,6 +3,8 @@
 namespace Drupal\funding\Service;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\funding\Plugin\Funding\FundingProviderInterface;
@@ -12,7 +14,19 @@ use Drupal\funding\Plugin\Funding\FundingProviderInterface;
  */
 class FundingProviderPluginManager extends DefaultPluginManager {
 
+  /**
+   * Runtime cache of plugins.
+   *
+   * @var array
+   */
   private array $cache = [];
+
+  /**
+   * Module settings.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  private ImmutableConfig $config;
 
   /**
    * Constructs FundingProviderPluginManager object.
@@ -25,7 +39,7 @@ class FundingProviderPluginManager extends DefaultPluginManager {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $configFactory) {
     parent::__construct(
       'Plugin/Funding/Provider',
       $namespaces,
@@ -35,6 +49,7 @@ class FundingProviderPluginManager extends DefaultPluginManager {
     );
     $this->alterInfo('funding_provider_info');
     $this->setCacheBackend($cache_backend, 'funding_provider_plugins');
+    $this->config = $configFactory->get('funding.settings');
   }
 
   /**
@@ -63,6 +78,14 @@ class FundingProviderPluginManager extends DefaultPluginManager {
     foreach ($this->getDefinitions() as $plugin_id => $definition) {
       $instances[$plugin_id] = $this->getProvider($plugin_id);
     }
+
+    $providers_settings = $this->config->get('providers_settings') ?? [];
+    usort($instances, function($a, $b) use ($providers_settings) {
+      $a_weight = $providers_settings[$a->id()]['weight'] ?? 0;
+      $b_weight = $providers_settings[$b->id()]['weight'] ?? 0;
+      return $a_weight <=> $b_weight;
+    });
+
     return $instances;
   }
 
