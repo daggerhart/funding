@@ -9,3 +9,15 @@ examples-form:
     - core/jquery
     - core/drupal
     - core/once
+
+settings-form:
+  version: 0.1
+  css:
+    theme:
+      css/settings-form.css: {}
+  js:
+    js/settings-form.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/once

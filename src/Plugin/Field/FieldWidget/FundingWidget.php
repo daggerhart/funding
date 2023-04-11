@@ -74,10 +74,10 @@ class FundingWidget extends WidgetBase {
     $element += [
       '#type' => 'textarea',
       '#default_value' => $value,
+      '#rows' => substr_count($value, "\n") + 1,
       '#element_validate' => [
         [$this, 'validateFunding'],
       ],
-      '#rows' => 8,
       '#attributes' => [
         'class' => [
           'funding-yaml-container',

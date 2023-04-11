@@ -62,6 +62,12 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Providers Configuration'),
       '#description' => $this->t('Change the order the providers are rendered, or disable unwanted providers.'),
       '#description_display' => 'before',
+      '#attributes' => [
+        'class' => ['funding-settings-form'],
+      ],
+      '#attached' => [
+        'library' => ['funding/settings-form']
+      ],
       // Sortable config table.
       'providers_configurations' => [
         '#type' => 'table',
@@ -85,18 +91,24 @@ class SettingsForm extends ConfigFormBase {
     foreach ($this->pluginManager->getFundingProviders() as $provider) {
       $row = [
         '#attributes' => [
-          'class' => ['draggable'],
+          'class' => [
+            'draggable',
+            ($provider->enabled() ? 'enabled' : 'disabled')
+          ],
         ],
         '#weight' => $provider->weight(),
         'name' => [
-          '#markup' => $provider->label(),
+          '#markup' => "<strong>" . $provider->label() . "</strong>",
         ],
         'description' => [
-          '#markup' => $provider->description(),
+          '#markup' => str_replace($provider->id(), "<code>{$provider->id()}</code>", $provider->description()),
         ],
         'enabled' => [
           '#type' => 'checkbox',
           '#default_value' => $provider->enabled(),
+          '#attributes' => [
+            'class' => ['finding-provider-enabled-checkbox'],
+          ],
         ],
         'weight' => [
           '#type' => 'weight',
