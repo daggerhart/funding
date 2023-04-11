@@ -28,9 +28,16 @@ class FundingYamlFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       $elements[$delta] = [
-        '#type' => 'html_tag',
-        '#tag' => 'pre',
-        '#value' => Html::escape(Yaml::encode(Yaml::decode($item->value))),
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['funding-examples-all-container'],
+        ],
+        'example' => [
+          '#theme' => 'funding_example',
+          '#content' => Html::escape(Yaml::encode(Yaml::decode($item->value))),
+          '#provider' => 0,
+          '#index' => 0,
+        ],
       ];
     }
 

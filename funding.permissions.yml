@@ -1,0 +1,4 @@
+administer funding configuration:
+  title: 'Administer Funding Configuration'
+  description: 'Optional description.'
+  restrict access: true

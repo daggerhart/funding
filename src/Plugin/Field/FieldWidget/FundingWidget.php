@@ -136,7 +136,7 @@ class FundingWidget extends WidgetBase {
     }
     catch (\Exception $exception) {
       $form_state->setError($element, $this->t('Unable to parse the YAML string: %message', [
-        '%message', $exception->getMessage(),
+        '%message' => $exception->getMessage(),
       ]));
     }
 
