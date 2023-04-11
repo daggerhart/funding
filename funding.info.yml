@@ -3,5 +3,6 @@ type: module
 description: 'Post Crowdfunding links and widgets for OpenCollective and similar platforms.'
 package: Fields
 core_version_requirement: ^8 || ^9 || ^10
+configure: funding.settings
 dependencies:
   - 'drupal:field'
