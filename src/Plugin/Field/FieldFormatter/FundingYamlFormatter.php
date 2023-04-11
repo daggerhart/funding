@@ -2,8 +2,8 @@
 
 namespace Drupal\funding\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Serialization\YamlSymfony;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Field\FieldItemListInterface;
 
@@ -34,7 +34,7 @@ class FundingYamlFormatter extends FormatterBase {
         ],
         'example' => [
           '#theme' => 'funding_example',
-          '#content' => Html::escape(Yaml::encode(Yaml::decode($item->value))),
+          '#content' => Html::escape(YamlSymfony::encode(YamlSymfony::decode($item->value))),
           '#provider' => 0,
           '#index' => 0,
         ],

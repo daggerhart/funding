@@ -2,8 +2,7 @@
 
 namespace Drupal\funding\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Render\Markup;
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\YamlSymfony;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -131,7 +130,7 @@ class FundingWidget extends WidgetBase {
     $valid = FALSE;
     $rows = [];
     try {
-      $rows = Yaml::decode($value);
+      $rows = YamlSymfony::decode($value);
       $valid = $this->providerProcessor->rowsAreValid($rows);
     }
     catch (\Exception $exception) {

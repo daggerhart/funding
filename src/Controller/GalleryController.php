@@ -2,9 +2,8 @@
 
 namespace Drupal\funding\Controller;
 
+use Drupal\Component\Serialization\YamlSymfony;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Render\Markup;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\funding\Service\FundingProviderPluginManager;
 use Drupal\funding\Service\FundingProviderProcessorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -85,7 +84,7 @@ class GalleryController extends ControllerBase {
           ],
         ];
 
-        $example_data = Yaml::decode($example_content);
+        $example_data = YamlSymfony::decode($example_content);
         $widget = $provider->build($example_data[$provider->id()]);
 
         $rows[] = [

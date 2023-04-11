@@ -2,9 +2,9 @@
 
 namespace Drupal\funding\Service;
 
+use Drupal\Component\Serialization\YamlSymfony;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\funding\Exception\InvalidFundingProviderData;
 use Psr\Log\LoggerInterface;
 
@@ -54,7 +54,7 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
    * {@inheritdoc}
    */
   public function processYaml(string $yaml): array {
-    $rows = Yaml::decode($yaml);
+    $rows = YamlSymfony::decode($yaml);
     return $this->process($rows);
   }
 
@@ -62,7 +62,7 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
    * {@inheritdoc}
    */
   public function yamlIsValid(string $yaml): bool {
-    $rows = Yaml::decode($yaml);
+    $rows = YamlSymfony::decode($yaml);
     return $this->rowsAreValid($rows);
   }
 

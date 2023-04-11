@@ -5,7 +5,7 @@
  * Provide a field to store and display crowdfunding links and widgets.
  */
 
-use Drupal\Core\Serialization\Yaml;
+use Drupal\Component\Serialization\YamlSymfony;
 
 /**
  * Implements hook_theme().
@@ -42,7 +42,7 @@ function template_preprocess_funding_example(&$variables) {
   $variables['#attached']['library'][] = 'funding/examples-form';
 
   if (str_contains($variables['content'], "\n")) {
-    $variables['content'] = Yaml::encode(Yaml::decode($variables['content']));
+    $variables['content'] = YamlSymfony::encode(YamlSymfony::decode($variables['content']));
   }
 }
 
