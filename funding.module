@@ -79,6 +79,7 @@ function template_preprocess_funding_examples_container(&$variables) {
  * Implements template_preprocess_hook().
  */
 function template_preprocess_funding_link(&$variables) {
+  $variables['#attached']['library'][] = 'funding/funding-link';
   $variables['attributes'] = [
     'href' => $variables['url'],
   ];

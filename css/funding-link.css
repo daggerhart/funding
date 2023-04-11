@@ -1,0 +1,125 @@
+.funding-link {
+  backface-visibility: hidden;
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  white-space: nowrap;
+  /*background: linear-gradient(90deg,#1d953f 0%,#209542 30px,#4dde76 30px,#4dde76 100%);*/
+  background: linear-gradient(90deg,gainsboro 0%, gainsboro 30px, whitesmoke 30px, whitesmoke 100%);
+  border-radius: 5px;
+  padding: 10px 24px 10px 60px;
+  color: dimgrey;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  text-decoration: none;
+}
+.funding-link:before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 30px;
+  top: 7px;
+  left: 15px;
+  background-color: white;
+  background-size: 24px 24px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+}
+
+.funding-link--custom {
+  background: linear-gradient(90deg, #6262f0 0%, #6262f0 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #6262f0;
+}
+.funding-link--custom:before {
+  background-image: url('../assets/images/custom.png');
+  background-size: 20px 20px;
+}
+
+.funding-link--github {
+  background: linear-gradient(90deg, #161b22 0%, #161b22 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #161b22;
+}
+.funding-link--github:before {
+  background-image: url('../assets/images/github.png');
+  background-size: 24px 24px;
+}
+
+.funding-link--hirepage {
+  background: linear-gradient(90deg, #549dff 0%, #549dff 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #549dff;
+}
+.funding-link--hirepage:before {
+  background-image: url('../assets/images/hirepage.png');
+  background-size: 18px 18px;
+}
+
+.funding-link--issuehunt {
+  background: linear-gradient(90deg, #036e47 0%, #036e47 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #036e47;
+  /*color: #2cc28c;*/
+}
+.funding-link--issuehunt:before {
+  background-image: url('../assets/images/issuehunt.png');
+}
+
+.funding-link--ko_fi {
+  background: linear-gradient(90deg, #0ab4ff 0%, #0ab4ff 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #0ab4ff;
+}
+.funding-link--ko_fi:before {
+  background-image: url('../assets/images/ko_fi.png');
+}
+
+.funding-link--community_bridge {
+  background: linear-gradient(90deg, #0077CC 0%, #0077CC 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #0077CC;
+}
+.funding-link--community_bridge:before {
+  background-image: url('../assets/images/community_bridge.png');
+  background-size: 18px 18px;
+}
+
+.funding-link--liberapay {
+  background: linear-gradient(90deg, #f6c915 0%, #f6c915 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #222;
+}
+.funding-link--liberapay:before {
+  background-image: url('../assets/images/liberapay.png');
+}
+
+.funding-link--open_collective {
+  background: linear-gradient(90deg, #3385ff 0%, #3385ff 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #3385ff;
+}
+.funding-link--open_collective:before {
+  background-image: url('../assets/images/open_collective.png');
+}
+
+.funding-link--otechie {
+  background: linear-gradient(90deg, gainsboro 0%, gainsboro 30px, whitesmoke 30px, whitesmoke 100%);
+}
+.funding-link--otechie:before {
+  background-image: url('../assets/images/custom.png');
+  background-size: 20px 20px;
+}
+
+.funding-link--patreon {
+  background: linear-gradient(90deg, #F1465A 0%, #F1465A 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #F1465A;
+}
+.funding-link--patreon:before {
+  background-image: url('../assets/images/patreon.png');
+  background-size: 18px 18px;
+}
+
+.funding-link--tidelift {
+  background: linear-gradient(90deg, #5B5B66 0%, #5B5B66 30px, whitesmoke 30px, whitesmoke 100%);
+  color: #f6914d;
+}
+.funding-link--tidelift:before {
+  background-image: url('../assets/images/tidelift.png');
+}

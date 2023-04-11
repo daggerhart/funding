@@ -21,3 +21,9 @@ settings-form:
     - core/jquery
     - core/drupal
     - core/once
+
+funding-link:
+  version: 0.1
+  css:
+    theme:
+      css/funding-link.css: {}
