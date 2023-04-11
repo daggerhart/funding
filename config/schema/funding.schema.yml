@@ -1,7 +1,8 @@
-field.value.funding:
-  type: mapping
-  label: 'Default value'
+# Schema for the configuration files of the Funding module.
+funding.settings:
+  type: config_object
+  label: 'Funding settings'
   mapping:
-    value:
-      type: text
-      label: 'Value'
+    providers_configurations:
+      type: sequence
+      label: 'Providers Configurations'
