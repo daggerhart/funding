@@ -41,6 +41,9 @@ function funding_theme($existing, $type, $theme, $path) {
 function template_preprocess_funding_example(&$variables) {
   $variables['#attached']['library'][] = 'funding/examples-form';
 
+  // The ending linebreak fixes issues with copying & pasting from single-line
+  // examples.
+  $variables['content'] .=  "\n";
   if (str_contains($variables['content'], "\n")) {
     $variables['content'] = YamlSymfony::encode(YamlSymfony::decode($variables['content']));
   }
