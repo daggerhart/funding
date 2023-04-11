@@ -5,6 +5,7 @@ namespace Drupal\funding\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 use Drupal\funding\Service\FundingProviderPluginManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -114,9 +115,52 @@ class SettingsForm extends ConfigFormBase {
         '#type' => 'submit',
         '#value' => $this->t('Save All Changes'),
       ],
+      'reset' => [
+        '#type' => 'submit',
+        '#value'  => $this->t('Reset'),
+        '#attributes' => [
+          'title' => $this->t('Reset Provider Configurations to defaults'),
+        ],
+        '#submit' => ['::submitReset'],
+        '#limit_validation_errors' => [],
+      ],
+      'cancel' => [
+        '#type' => 'submit',
+        '#value'  => $this->t('Cancel'),
+        '#attributes' => [
+          'title' => $this->t('Refresh the page without saving.'),
+        ],
+        '#submit' => ['::submitCancel'],
+        '#limit_validation_errors' => [],
+      ],
     ];
 
     return parent::buildForm($form, $form_state);
+  }
+
+  /**
+   * Form submission handler for the 'Reset' action.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function submitReset(array &$form, FormStateInterface $form_state) {
+    $form_state->setRedirect('funding.provider_configurations_reset_confirm');
+  }
+
+  /**
+   * Form submission handler for the 'Cancel' action.
+   *
+   * @param array $form
+   *   An associative array containing the structure of the form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  public function submitCancel(array &$form, FormStateInterface $form_state) {
+    $this->messenger()->addStatus($this->t('Changes discarded.'));
+    $form_state->setRedirect('funding.settings');
   }
 
   /**
