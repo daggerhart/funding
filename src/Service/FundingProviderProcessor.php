@@ -6,26 +6,48 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\funding\Exception\InvalidFundingProviderData;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Default implementation of funding processor.
+ */
 class FundingProviderProcessor implements FundingProviderProcessorInterface {
 
   /**
+   * Funding settings.
+   *
    * @var \Drupal\Core\Config\ImmutableConfig
    */
   private ImmutableConfig $config;
 
   /**
+   * Funding providers plugin manager.
+   *
    * @var \Drupal\funding\Service\FundingProviderPluginManager
    */
-  private FundingProviderPluginManager $manager;
+  private FundingProviderPluginManager $pluginManager;
 
   /**
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
-   * @param \Drupal\funding\Service\FundingProviderPluginManager $manager
+   * Logger.
+   *
+   * @var \Psr\Log\LoggerInterface
    */
-  public function __construct(ConfigFactoryInterface $configFactory, FundingProviderPluginManager $manager) {
-    $this->config = $configFactory->get('');
-    $this->manager = $manager;
+  private LoggerInterface $logger;
+
+  /**
+   * Constructor().
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   Config factory.
+   * @param \Drupal\funding\Service\FundingProviderPluginManager $pluginManager
+   *   Funding providers plugin manager.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Logger.
+   */
+  public function __construct(ConfigFactoryInterface $configFactory, FundingProviderPluginManager $pluginManager, LoggerInterface $logger) {
+    $this->config = $configFactory->get('funding.settings');
+    $this->pluginManager = $pluginManager;
+    $this->logger = $logger;
   }
 
   /**
@@ -62,11 +84,11 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
     foreach ($rows as $provider_id => $row) {
       try {
         // The key for the row is the FundingProvider plugin id.
-        if (!$this->manager->hasDefinition($provider_id)) {
+        if (!$this->pluginManager->hasDefinition($provider_id)) {
           $validations[$provider_id] = new InvalidFundingProviderData('Provider plugin not found: '. $provider_id);
         }
 
-        $provider = $this->manager->getProvider($provider_id);
+        $provider = $this->pluginManager->getFundingProvider($provider_id);
         $validations[$provider_id] = $provider->validate($row);
       }
       catch (InvalidFundingProviderData $exception) {
@@ -85,19 +107,28 @@ class FundingProviderProcessor implements FundingProviderProcessorInterface {
       '#type' => 'container',
     ];
 
-    foreach ($rows as $provider_id => $row) {
-      // The key for the row is the FundingProvider plugin id.
-      if (!$this->manager->hasDefinition($provider_id)) {
+    // Loop through plugin instances so that rendered happens in order
+    // of the configurable #weight of the plugin.
+    foreach ($this->pluginManager->getFundingProviders() as $provider) {
+      if (!$provider->enabled()) {
+        continue;
+      }
+      if (!$provider->isReady()) {
+        continue;
+      }
+      if (!isset($rows[$provider->id()])) {
         continue;
       }
 
+      $row = $rows[$provider->id()];
       try {
-        $provider = $this->manager->getProvider($provider_id);
-        if ($provider->isReady() && $provider->validate($row)) {
-          $build[$provider_id] = $provider->build($row);
+        if ($provider->validate($row)) {
+          $build[$provider->id()] = $provider->build($row);
         }
       }
-      catch (InvalidFundingProviderData $exception) {}
+      catch (InvalidFundingProviderData $exception) {
+        $this->logger->notice($exception->getMessage());
+      }
     }
 
     return array_filter($build);

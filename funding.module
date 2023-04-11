@@ -54,7 +54,7 @@ function template_preprocess_funding_examples_container(&$variables) {
   if (!$variables['providers']) {
     /** @var \Drupal\funding\Service\FundingProviderPluginManager $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.funding_provider');
-    $variables['providers'] = $plugin_manager->getProviders();
+    $variables['providers'] = $plugin_manager->getFundingProviders();
   }
 
   $variables['#attached']['library'][] = 'funding/examples-form';

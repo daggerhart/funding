@@ -91,9 +91,9 @@ class FundingWidget extends WidgetBase {
     ];
     $examples_render = [
       '#theme' => 'funding_examples_container',
-      '#providers' => $this->manager->getProviders(),
+      '#providers' => $this->manager->getFundingProviders(),
     ];
-    foreach ($this->manager->getProviders() as $provider) {
+    foreach ($this->manager->getFundingProviders() as $provider) {
       $example_options[$provider->id()] = $provider->label();
     }
 

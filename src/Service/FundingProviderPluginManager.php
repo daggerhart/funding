@@ -53,6 +53,23 @@ class FundingProviderPluginManager extends DefaultPluginManager {
   }
 
   /**
+   * Get the configuration for a specific funding provider.
+   *
+   * @param string $plugin_id
+   *   Plugin id.
+   *
+   * @return array
+   *   Configuration.
+   */
+  public function getFundingProviderConfiguration(string $plugin_id): array {
+    $providers_configurations = $this->config->get('providers_configurations') ?? [];
+    return $providers_configurations[$plugin_id] ?? [
+      'weight' => 0,
+      'enabled' => 1,
+    ];
+  }
+
+  /**
    * Create an instance of a plugin.
    *
    * @param string $plugin_id
@@ -66,6 +83,7 @@ class FundingProviderPluginManager extends DefaultPluginManager {
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
   public function createInstance($plugin_id, array $configuration = []): FundingProviderInterface {
+    $configuration += $this->getFundingProviderConfiguration($plugin_id);
     return parent::createInstance($plugin_id, $configuration);
   }
 
@@ -73,17 +91,18 @@ class FundingProviderPluginManager extends DefaultPluginManager {
    * @return \Drupal\funding\Plugin\Funding\FundingProviderInterface[]
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function getProviders(): array {
+  public function getFundingProviders(): array {
     $instances = [];
     foreach ($this->getDefinitions() as $plugin_id => $definition) {
-      $instances[$plugin_id] = $this->getProvider($plugin_id);
+      $instances[$plugin_id] = $this->getFundingProvider($plugin_id);
     }
 
-    $providers_settings = $this->config->get('providers_settings') ?? [];
-    usort($instances, function($a, $b) use ($providers_settings) {
-      $a_weight = $providers_settings[$a->id()]['weight'] ?? 0;
-      $b_weight = $providers_settings[$b->id()]['weight'] ?? 0;
-      return $a_weight <=> $b_weight;
+    usort($instances, function($a, $b) {
+      /**
+       * @var FundingProviderInterface $a
+       * @var FundingProviderInterface $b
+       */
+      return $a->weight() <=> $b->weight();
     });
 
     return $instances;
@@ -96,7 +115,7 @@ class FundingProviderPluginManager extends DefaultPluginManager {
    * @return \Drupal\funding\Plugin\Funding\FundingProviderInterface
    * @throws \Drupal\Component\Plugin\Exception\PluginException
    */
-  public function getProvider(string $plugin_id, array $configuration = []): FundingProviderInterface {
+  public function getFundingProvider(string $plugin_id, array $configuration = []): FundingProviderInterface {
     $cid = md5(serialize([$plugin_id, $configuration]));
     if (array_key_exists($cid, $this->cache)) {
       return $this->cache[$cid];

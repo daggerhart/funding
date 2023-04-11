@@ -57,7 +57,7 @@ class GalleryController extends ControllerBase {
   public function build() {
 
     $rows = [];
-    foreach ($this->pluginManager->getProviders() as $provider) {
+    foreach ($this->pluginManager->getFundingProviders() as $provider) {
       foreach ($provider->examples() as $i => $example_content) {
         if (!$provider->isReady()) {
           continue;

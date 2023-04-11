@@ -1,4 +1,9 @@
 services:
+  funding.logger:
+    parent: logger.channel_base
+    arguments:
+      - 'funding'
+
   plugin.manager.funding_provider:
     class: Drupal\funding\Service\FundingProviderPluginManager
     arguments:
@@ -12,3 +17,4 @@ services:
     arguments:
       - '@config.factory'
       - '@plugin.manager.funding_provider'
+      - '@funding.logger'

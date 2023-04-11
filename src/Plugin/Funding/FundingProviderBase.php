@@ -67,6 +67,20 @@ abstract class FundingProviderBase extends PluginBase implements FundingProvider
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function weight(): int {
+    return (int) $this->configuration['weight'] ?? 0;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function enabled(): bool {
+    return (bool) $this->configuration['enabled'] ?? 1;
+  }
+
+  /**
    * Validates given data is string or array.
    *
    * @param mixed $data

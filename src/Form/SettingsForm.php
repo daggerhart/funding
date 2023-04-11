@@ -56,14 +56,13 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('funding.settings');
-
     $form['providers'] = [
       '#type' => 'fieldset',
-      '#title' => $this->t('Providers'),
+      '#title' => $this->t('Providers Configuration'),
       '#description' => $this->t('Change the order the providers are rendered, or disable unwanted providers.'),
       '#description_display' => 'before',
-      'providers_settings' => [
+      // Sortable config table.
+      'providers_configurations' => [
         '#type' => 'table',
         '#header' => [
           $this->t('Provider'),
@@ -82,17 +81,12 @@ class SettingsForm extends ConfigFormBase {
       ]
     ];
 
-    $providers_settings = $config->get('providers_settings') ?: [];
-    foreach ($this->pluginManager->getProviders() as $provider) {
-      $provider_settings = $providers_settings[$provider->id()] ?? [
-        'weight' => 0,
-        'enabled' => 1,
-      ];
+    foreach ($this->pluginManager->getFundingProviders() as $provider) {
       $row = [
         '#attributes' => [
           'class' => ['draggable'],
         ],
-        '#weight' => (int) $provider_settings['weight'],
+        '#weight' => $provider->weight(),
         'name' => [
           '#markup' => $provider->label(),
         ],
@@ -101,18 +95,17 @@ class SettingsForm extends ConfigFormBase {
         ],
         'enabled' => [
           '#type' => 'checkbox',
-          '#default_value' => $provider_settings['enabled'],
+          '#default_value' => $provider->enabled(),
         ],
         'weight' => [
           '#type' => 'weight',
           '#title' => $this->t('Weight for @title', ['@title' => $provider->label()]),
           '#title_display' => 'invisible',
-          '#default_value' => $provider_settings['weight'],
-          // Classify the weight element for #tabledrag.
+          '#default_value' => $provider->weight(),
           '#attributes' => ['class' => ['table-sort-weight']],
         ]
       ];
-      $form['providers']['providers_settings'][$provider->id()] = $row;
+      $form['providers']['providers_configurations'][$provider->id()] = $row;
     }
 
     $form['actions'] = [
@@ -136,7 +129,7 @@ class SettingsForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('funding.settings')
-      ->set('providers_settings', $form_state->getValue('providers_settings'))
+      ->set('providers_configurations', $form_state->getValue('providers_configurations'))
       ->save();
 
     parent::submitForm($form, $form_state);

@@ -69,4 +69,20 @@ interface FundingProviderInterface {
    */
   public function build($data): array;
 
+  /**
+   * Plugin's weight determines its rendering order.
+   *
+   * @return int
+   *   Plugin's weight.
+   */
+  public function weight(): int;
+
+  /**
+   * Whether the plugin is enabled for rendering.
+   *
+   * @return bool
+   *   True if enabled.
+   */
+  public function enabled(): bool;
+
 }
