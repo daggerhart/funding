@@ -35,7 +35,7 @@
   color: #6262f0;
 }
 .funding-link--custom:before {
-  background-image: url('../assets/images/custom.png');
+  background-image: url('../images/custom.png');
   background-size: 20px 20px;
 }
 
@@ -44,7 +44,7 @@
   color: #161b22;
 }
 .funding-link--github:before {
-  background-image: url('../assets/images/github.png');
+  background-image: url('../images/github.png');
   background-size: 24px 24px;
 }
 
@@ -53,7 +53,7 @@
   color: #549dff;
 }
 .funding-link--hirepage:before {
-  background-image: url('../assets/images/hirepage.png');
+  background-image: url('../images/hirepage.png');
   background-size: 18px 18px;
 }
 
@@ -63,7 +63,7 @@
   /*color: #2cc28c;*/
 }
 .funding-link--issuehunt:before {
-  background-image: url('../assets/images/issuehunt.png');
+  background-image: url('../images/issuehunt.png');
 }
 
 .funding-link--ko_fi {
@@ -71,7 +71,7 @@
   color: #0ab4ff;
 }
 .funding-link--ko_fi:before {
-  background-image: url('../assets/images/ko_fi.png');
+  background-image: url('../images/ko_fi.png');
 }
 
 .funding-link--community_bridge {
@@ -79,7 +79,7 @@
   color: #0077CC;
 }
 .funding-link--community_bridge:before {
-  background-image: url('../assets/images/community_bridge.png');
+  background-image: url('../images/community_bridge.png');
   background-size: 18px 18px;
 }
 
@@ -88,7 +88,7 @@
   color: #222;
 }
 .funding-link--liberapay:before {
-  background-image: url('../assets/images/liberapay.png');
+  background-image: url('../images/liberapay.png');
 }
 
 .funding-link--open_collective {
@@ -96,14 +96,14 @@
   color: #3385ff;
 }
 .funding-link--open_collective:before {
-  background-image: url('../assets/images/open_collective.png');
+  background-image: url('../images/open_collective.png');
 }
 
 .funding-link--otechie {
   background: linear-gradient(90deg, gainsboro 0%, gainsboro 30px, whitesmoke 30px, whitesmoke 100%);
 }
 .funding-link--otechie:before {
-  background-image: url('../assets/images/custom.png');
+  background-image: url('../images/custom.png');
   background-size: 20px 20px;
 }
 
@@ -112,7 +112,7 @@
   color: #F1465A;
 }
 .funding-link--patreon:before {
-  background-image: url('../assets/images/patreon.png');
+  background-image: url('../images/patreon.png');
   background-size: 18px 18px;
 }
 
@@ -121,5 +121,5 @@
   color: #f6914d;
 }
 .funding-link--tidelift:before {
-  background-image: url('../assets/images/tidelift.png');
+  background-image: url('../images/tidelift.png');
 }

@@ -2,9 +2,9 @@ examples-form:
   version: 0.1
   css:
     theme:
-      css/examples-form.css: {}
+      assets/css/examples-form.css: {}
   js:
-    js/examples-form.js: {}
+    assets/js/examples-form.js: {}
   dependencies:
     - core/jquery
     - core/drupal
@@ -14,9 +14,9 @@ settings-form:
   version: 0.1
   css:
     theme:
-      css/settings-form.css: {}
+      assets/css/settings-form.css: {}
   js:
-    js/settings-form.js: {}
+    assets/js/settings-form.js: {}
   dependencies:
     - core/jquery
     - core/drupal
@@ -26,4 +26,4 @@ funding-link:
   version: 0.1
   css:
     theme:
-      css/funding-link.css: {}
+      assets/css/funding-link.css: {}
